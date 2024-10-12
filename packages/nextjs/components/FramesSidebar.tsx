@@ -7,9 +7,9 @@ import { getFrameById } from "~~/services/frames";
 import { Frame, InternalFrameJSON } from "~~/types/commontypes";
 
 function FrameSidebar() {
-  const { productQuery, frame, setFrame, setCurrentFrame, createFrame } = useProductJourney();
+  const { productQuery, frame, setFrame, setCurrentFrame, createFrame, currentFrameId, setCurrentFrameId } =
+    useProductJourney();
   const [frames, setFrames] = useState<Frame[] | undefined>(undefined);
-  const [currentFrameId, setCurrentFrameId] = useState<string>(frame?._id as string);
 
   const framesQuery = useQuery({
     queryKey: ["frames", productQuery.data],
@@ -27,7 +27,7 @@ function FrameSidebar() {
 
   useEffect(() => {
     setCurrentFrameId(frame?._id as string);
-  }, [frame]);
+  }, [frame, setCurrentFrameId]);
 
   const onCreate = async () => {
     await createFrame.mutateAsync({

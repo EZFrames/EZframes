@@ -14,6 +14,7 @@ interface IProductJourney {
   journey: Journey | null;
   setCurrentFrame: (frame: InternalFrameJSON) => void;
   currentFrame: InternalFrameJSON | null;
+  setCurrentFrameId: (frameId: string) => void;
   currentFrameId: string | null;
   createFrame: UseMutationResult<Frame, Error, Omit<Frame, "_id">>;
   saveFrame: UseMutationResult<Frame, Error, Frame>;
@@ -186,6 +187,7 @@ const useProduct = () => {
     currentFrame,
     currentFrameId,
     setCurrentFrame,
+    setCurrentFrameId,
     journey,
     createFrame,
     saveFrame,

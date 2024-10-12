@@ -63,7 +63,6 @@ const theme: FrameUITheme<StylingProps> = {
 
 export default function FrameJSRenderer() {
   const { productID, currentFrameId } = useProductJourney();
-  console.log(productID, currentFrameId);
   // @TODO: replace with your farcaster signer
   const farcasterSigner: FarcasterSigner = {
     fid: 1,
@@ -75,7 +74,6 @@ export default function FrameJSRenderer() {
   const frameState = useFrame({
     // replace with frame URL
     homeframeUrl: `${APP_URL}/frame/${productID}/${currentFrameId}`,
-    // corresponds to the name of the route for POST and GET in step 2
     frameActionProxy: "/api/proxy/",
     frameGetProxy: "/api/proxy/",
     connectedAddress: undefined,
@@ -98,5 +96,9 @@ export default function FrameJSRenderer() {
     },
   });
 
-  return <FrameUI frameState={frameState} components={components} theme={theme} />;
+  frameState.onButtonPress = button => {
+    console.log("Button pressed", button);
+  };
+
+  return <FrameUI key={currentFrameId} frameState={frameState} components={components} theme={theme} />;
 }
