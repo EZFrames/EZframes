@@ -34,6 +34,12 @@ export const removeUrl = (url: string, product_id: string) => {
   return url.replace(`${APP_URL}/api/frog/${product_id}/`, "");
 };
 
+export const removeTxUrl = (url: string, product_id: string, frameId: string) => {
+  if (!url) return "";
+  console.log(url.replace(`${APP_URL}/api/frog/${product_id}/${frameId}/`, ""));
+  return url.replace(`${APP_URL}/api/frog/${product_id}/${frameId}/`, "");
+};
+
 export const createFrame = async (frame: Omit<Frame, "_id">) => {
   try {
     const response = await fetch(`/api/frame`, {
