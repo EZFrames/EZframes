@@ -75,6 +75,8 @@ app.frame(`/:journeyId/:frameId`, async c => {
   });
 });
 
+devtools(app, { serveStatic });
+
 app.transaction("/:journeyId/:frameId/send-ether", async c => {
   const match = c.req.path.match(/\/([a-zA-Z0-9]+)\/([a-zA-Z0-9]+)/);
 
@@ -110,6 +112,5 @@ app.transaction("/:journeyId/:frameId/send-contract", c => {
   });
 });
 
-devtools(app, { serveStatic });
 export const GET = handle(app);
 export const POST = handle(app);

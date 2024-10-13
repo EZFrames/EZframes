@@ -44,6 +44,8 @@
   },
   "packageManager": "yarn@4.4.0",
   "dependencies": {
+    "@frames.js/render": "^0.3.14",
+    "lucide-react": "^0.451.0",
     "permissionless": "^0.1.44",
     "recharts": "^2.12.7"
   }
