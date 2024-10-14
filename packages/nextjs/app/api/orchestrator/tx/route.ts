@@ -28,7 +28,7 @@ export async function POST(req: NextRequest): Promise<NextResponse<FrameTransact
   });
   return NextResponse.json({
     chainId: "eip155:137",
-    method: "eth_transaction",
+    method: "eth_sendTransaction",
     params: {
       abi: ABI,
       to: contract,
