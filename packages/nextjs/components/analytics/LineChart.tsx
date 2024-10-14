@@ -14,7 +14,7 @@ const LineChart = ({ data }: { data: any }) => {
   const options = {
     chart: {
       height: 350,
-      type: "line",
+      type: "area",
       zoom: {
         enabled: false,
       },
@@ -23,6 +23,12 @@ const LineChart = ({ data }: { data: any }) => {
       categories: data.map((entry: any) => entry.date),
       title: {
         text: "Date",
+      },
+    },
+    grid: {
+      row: {
+        colors: ["#f3f3f3", "transparent"], // takes an array which will be repeated on columns
+        opacity: 0.5,
       },
     },
     yaxis: {

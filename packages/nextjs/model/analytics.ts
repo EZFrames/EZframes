@@ -7,6 +7,7 @@ interface Analytics extends Document {
   buttonClicked: number;
   inputtedText: string;
   timestamp: Date;
+  typeOfFrame: string;
 }
 
 const AnalyticsSchema: Schema<Analytics> = new Schema<Analytics>(
@@ -17,6 +18,7 @@ const AnalyticsSchema: Schema<Analytics> = new Schema<Analytics>(
     buttonClicked: Number, // 0 for no button clicked, 1 for button 1 clicked....
     inputtedText: String, // text inputted by the user, null if empty
     timestamp: Number, // timestamp of the event
+    typeOfFrame: String, // type of frame
   },
   {
     timestamps: true,

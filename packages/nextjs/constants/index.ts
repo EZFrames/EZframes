@@ -1,7 +1,8 @@
 import { FrameMetadataType } from "@coinbase/onchainkit";
 import { Abi } from "viem";
+import { InternalFrameJSON } from "~~/types/commontypes";
 
-export const APP_URL = "https://ezframes.xyz";
+export const APP_URL = "http://localhost:3000";
 export const txFrame = {
   buttons: [
     {
@@ -36,34 +37,54 @@ export const emailFrame = {
   },
 } as FrameMetadataType;
 
-export const DEFAULT_FRAME: FrameMetadataType = {
-  buttons: [
-    {
-      action: "post",
-      target: "http://localhost:3000/api/orchestrator/1",
-      label: "Easy",
-    },
-    {
-      action: "link",
-      label: "Frame",
-      target: "https://onchainkit.xyz",
-    },
-    {
-      action: "post_redirect",
-      label: "Creation",
-    },
-  ],
+export const DEFAULT_FRAME = {
+  image: `<div style={{ color: 'black',height:'300px',width:'300px', display: 'flex', fontSize: 60 }}> Select your fruit! </div>`,
+  intents: `[
+    <Button value="apple"> Apple </Button>,
+    <Button value="banana"> Banana </Button>,
+    <Button value="mango"> Mango </Button>
+  ]`,
+};
+
+export const TRIAL_FRAME: InternalFrameJSON = {
   image: {
-    src: "https://placehold.co/600x400",
+    type: "html",
+    style: {
+      backgroundColor: "white",
+      borderRadius: "10px",
+      border: "1px solid #ccc",
+      color: "black",
+      display: "flex",
+      justifyContent: "center",
+      fontSize: 60,
+      textAlign: "center",
+    },
+    content: `Select your fruit!`,
   },
-  state: {
-    time: "2024-06-28T16:14:14.986Z",
-    journey_id: "1",
-    frame_id: "2",
-  },
-  input: {
-    text: "Type here",
-  },
+  intents: [
+    {
+      type: "Button",
+      props: {
+        value: "apple",
+      },
+      content: "DIDNT ASKKKK",
+    },
+    {
+      type: "Button.Link",
+      props: {
+        href: "https://google.com",
+      },
+      content: "Google",
+    },
+    {
+      type: "Button.Transaction",
+      props: {
+        value: "mango",
+      },
+      content: "Mango",
+    },
+    { type: "TextInput", props: { placeholder: "Enter your favourite fruit" } },
+  ],
 };
 
 export const ABI: Abi = [

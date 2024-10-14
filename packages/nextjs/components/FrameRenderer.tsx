@@ -1,28 +1,19 @@
 import { useProductJourney } from "~~/providers/ProductProvider";
 
 function FrameRender() {
-  const { currentFrame } = useProductJourney();
+  const { currentFrame, buttons, textInput } = useProductJourney();
   if (!currentFrame) return null;
   return (
     <>
+      {/*@ts-ignore */}
+      {currentFrame.image.type === "html" && <div style={frame.image.props.style}>{frame.image.content}</div>}
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        // @ts-ignore
-        src={currentFrame.image?.src as string}
-        alt="Description of the image"
-        style={{
-          borderRadius: "4px",
-          border: "1px solid #ccc",
-          aspectRatio: "1:1",
-          maxHeight: "500px",
-          width: "100%",
-        }}
-      />
-      {currentFrame.input?.text && (
+      {currentFrame.image.type === "src" && <img src={currentFrame.image.src} alt="Product" />}
+      {textInput && (
         <input
           className="w-full p-2 border mt-1 border-gray-400 rounded bg-white" // Set background color to white
           type="text"
-          placeholder={currentFrame.input.text}
+          placeholder={textInput?.props?.placeholder}
         />
       )}
       <div
@@ -33,19 +24,21 @@ function FrameRender() {
           gap: "4px",
         }}
       >
-        {currentFrame.buttons?.map(({ label }, index: number) => (
-          <button
-            type="button"
-            className="btn bg-black rounded-md text-white px-4 py-2"
-            style={{
-              flex: "1 1 0px",
-              cursor: "pointer",
-            }}
-            key={index}
-          >
-            {label}
-          </button>
-        ))}
+        {buttons?.map((intent: any, index: number) => {
+          return (
+            <button
+              type="button"
+              className="btn bg-black rounded-md text-white px-4 py-2"
+              style={{
+                flex: "1 1 0px",
+                cursor: "pointer",
+              }}
+              key={index}
+            >
+              {intent.content}
+            </button>
+          );
+        })}
       </div>
     </>
   );

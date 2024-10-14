@@ -29,9 +29,9 @@ export const getFrameAtServer = async (id: string) => {
   }
 };
 
-export const removeUrl = (url: string) => {
+export const removeUrl = (url: string, product_id: string) => {
   if (!url) return "";
-  return url.replace(`${APP_URL}/api/orchestrator/`, "");
+  return url.replace(`${APP_URL}/api/frog/${product_id}/`, "");
 };
 
 export const createFrame = async (frame: Omit<Frame, "_id">) => {
