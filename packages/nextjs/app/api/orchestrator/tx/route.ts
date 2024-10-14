@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { FrameRequest, FrameTransactionResponse } from "@coinbase/onchainkit/lib/frame/types";
+import { FrameRequest, FrameTransactionResponse } from "@coinbase/onchainkit/src/frame";
 import { encodeFunctionData, parseEther } from "viem";
 import { ABI, contract, myAddress } from "~~/constants";
 import { getJourneyById } from "~~/services/frames";
