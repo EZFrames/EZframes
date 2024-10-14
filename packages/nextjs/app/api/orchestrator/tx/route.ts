@@ -23,12 +23,12 @@ export async function POST(req: NextRequest): Promise<NextResponse<FrameTransact
   const address = myAddress;
   const callData = encodeFunctionData({
     abi: ABI,
-    functionName: "trf",
-    args: [address, parseEther("0.001"), BigInt(untrustedData?.inputText || 1)],
+    functionName: "store",
+    args: [1],
   });
   return NextResponse.json({
     chainId: "eip155:137",
-    method: "eth_sendTransaction",
+    method: "eth_transaction",
     params: {
       abi: ABI,
       to: contract,
