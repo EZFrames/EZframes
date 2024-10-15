@@ -30,6 +30,7 @@ const chainIds = {
 const ButtonEditor = ({ button, onSave, onDelete }: ButtonEditorProps) => {
   const { frames: dbFrames, frame, productID } = useProductJourney();
   const [frames, setFrames] = useState<Frame[] | undefined>();
+  const [frameTxConfig, setFrameTxConfig] = useState<object | undefined>();
   useEffect(() => {
     if (dbFrames) {
       Promise.all(dbFrames.map(frame => getFrameById(frame)))
@@ -210,7 +211,15 @@ const ButtonEditor = ({ button, onSave, onDelete }: ButtonEditorProps) => {
               <label htmlFor="chainId" className="block text-sm font-medium text-gray-700 mb-1">
                 Chain ID
               </label>
-              <Select id="chainId" size="small" value="" variant="outlined" onChange={e => console.log(e)}>
+              <Select
+                id="chainId"
+                size="small"
+                value=""
+                variant="outlined"
+                onChange={e => {
+                  setFrameTxConfig({ ...frameTxConfig, chainId: e.target.value });
+                }}
+              >
                 {Object.entries(chainIds).map(([chainName, chainId], index) => (
                   <MenuItem key={index} value={chainId}>
                     {chainName}
@@ -220,11 +229,25 @@ const ButtonEditor = ({ button, onSave, onDelete }: ButtonEditorProps) => {
               <label htmlFor="toAddress" className="block text-sm font-medium text-gray-700 mb-1">
                 To Address
               </label>
-              <TextField id="toAddress" size="small" value="" onChange={e => console.log(e.target.value)} />
+              <TextField
+                id="toAddress"
+                size="small"
+                value=""
+                onChange={e => {
+                  setFrameTxConfig({ ...frameTxConfig, toAddress: e.target.value });
+                }}
+              />
               <label htmlFor="value" className="block text-sm font-medium text-gray-700 mb-1">
                 Value
               </label>
-              <TextField id="value" size="small" value="" onChange={e => console.log(e.target.value)} />
+              <TextField
+                id="value"
+                size="small"
+                value=""
+                onChange={e => {
+                  setFrameTxConfig({ ...frameTxConfig, value: e.target.value });
+                }}
+              />
             </>
           )}
           {button.props.target?.includes("send-contract") && (
@@ -232,7 +255,15 @@ const ButtonEditor = ({ button, onSave, onDelete }: ButtonEditorProps) => {
               <label htmlFor="chainId" className="block text-sm font-medium text-gray-700 mb-1">
                 Chain ID
               </label>
-              <Select id="chainId" size="small" value="" variant="outlined" onChange={e => console.log(e)}>
+              <Select
+                id="chainId"
+                size="small"
+                value=""
+                variant="outlined"
+                onChange={e => {
+                  setFrameTxConfig({ ...frameTxConfig, chainId: e.target.value });
+                }}
+              >
                 {Object.entries(chainIds).map(([chainName, chainId], index) => (
                   <MenuItem key={index} value={chainId}>
                     {chainName}
@@ -242,19 +273,41 @@ const ButtonEditor = ({ button, onSave, onDelete }: ButtonEditorProps) => {
               <label htmlFor="toAddress" className="block text-sm font-medium text-gray-700 mb-1">
                 To Address
               </label>
-              <TextField id="toAddress" size="small" value="" onChange={e => console.log(e.target.value)} />
+              <TextField
+                id="toAddress"
+                size="small"
+                value=""
+                onChange={e => {
+                  setFrameTxConfig({ ...frameTxConfig, toAddress: e.target.value });
+                }}
+              />
               <label htmlFor="value" className="block text-sm font-medium text-gray-700 mb-1">
                 Contract Address (fetch ABI)
               </label>
-              <TextField id="value" size="small" value="" onChange={e => console.log(e.target.value)} />
+              <TextField
+                id="value"
+                size="small"
+                value=""
+                onChange={e => {
+                  setFrameTxConfig({ ...frameTxConfig, contractAddress: e.target.value });
+                }}
+              />
               <label htmlFor="functionName" className="block text-sm font-medium text-gray-700 mb-1">
                 Function Name
               </label>
-              <TextField id="functionName" size="small" value="" onChange={e => console.log(e.target.value)} />
+              <TextField
+                id="functionName"
+                size="small"
+                value=""
+                onChange={e => {
+                  setFrameTxConfig({ ...frameTxConfig, functionName: e.target.value });
+                }}
+              />
             </>
           )}
         </>
       )}
+      {/* @ts-ignore */}
       <CustomButton buttonType="delete" variant="contained" onClick={onDelete} size="small">
         Delete Button
       </CustomButton>
