@@ -3,7 +3,6 @@ import { Abi } from "viem";
 import { InternalFrameJSON } from "~~/types/commontypes";
 
 export const APP_URL = "http://localhost:3001";
-// get from env
 export const ENZYME_API_KEY = process.env.ENZYME_API_KEY;
 export const txFrame = {
   buttons: [
