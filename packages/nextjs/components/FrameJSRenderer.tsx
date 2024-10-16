@@ -1,7 +1,5 @@
 "use client";
 
-import defaultImageLoader from "next/dist/shared/lib/image-loader";
-import Image, { ImageLoaderProps } from "next/image";
 import { fallbackFrameContext } from "@frames.js/render";
 import { type FarcasterSigner, signFrameAction } from "@frames.js/render/farcaster";
 import { FrameUI, type FrameUIComponents, type FrameUITheme } from "@frames.js/render/ui";
@@ -24,48 +22,7 @@ type StylingProps = {
  *
  * You can also style components here and completely ignore theme if you wish.
  */
-const components: FrameUIComponents<StylingProps> = {
-  Image(props, stylingProps) {
-    if (props.status === "frame-loading") {
-      return <div />;
-    }
-
-    /**
-     * Because of how browsers behave we want to force browser to reload the dynamic image on each render
-     * but for the rest of images we want default behaviour.
-     */
-    const url = new URL(props.src);
-    const isDynamicUrl = true;
-
-    const loader = (loaderProps: ImageLoaderProps) => {
-      /**
-       * This is debugger specific loader. We need that because dynamic images have static URL
-       * and browser will not reload the url if it already has been rendered.
-       *
-       * The beautiful thing about this is that internally the cache headers of dynamic image are respected
-       * because next.js caches them.
-       */
-      return `${defaultImageLoader(loaderProps as any)}&_id=${Date.now()}`;
-    };
-
-    // this is necessary for nextjs so it passes config to default image loader
-    loader.__next_img_default = true;
-    console.log("I AM IN IMG THIS IS MY URL", { url, isDynamicUrl });
-    return (
-      <Image
-        {...stylingProps}
-        loader={isDynamicUrl ? loader : undefined}
-        src={props.src}
-        onLoad={props.onImageLoadEnd}
-        onError={props.onImageLoadEnd}
-        alt="Frame image"
-        sizes="100vw"
-        height={0}
-        width={0}
-      />
-    );
-  },
-};
+const components: FrameUIComponents<StylingProps> = {};
 
 /**
  * By default there are no styles so it is up to you to style the components as you wish.
@@ -106,26 +63,30 @@ const theme: FrameUITheme<StylingProps> = {
 
 export default function FrameJSRenderer() {
   const { productID, currentFrameId } = useProductJourney();
+  // @TODO: replace with your farcaster signer
   const farcasterSigner: FarcasterSigner = {
     fid: 1,
     status: "approved",
     publicKey: "0x00000000000000000000000000000000000000000000000000000000000000000",
     privateKey: "0x00000000000000000000000000000000000000000000000000000000000000000",
   };
+
   const frameState = useFrame({
+    // replace with frame URL
     homeframeUrl: `${APP_URL}/frame/${productID}/${currentFrameId}`,
     frameActionProxy: "/api/proxy/",
     frameGetProxy: "/api/proxy/",
     connectedAddress: undefined,
     frameContext: fallbackFrameContext,
+    // map to your identity if you have one
     signerState: {
-      hasSigner: farcasterSigner?.status === "approved",
+      hasSigner: farcasterSigner.status === "approved",
       signer: farcasterSigner,
       isLoadingSigner: false,
       async onSignerlessFramePress() {
         // Only run if `hasSigner` is set to `false`
         // This is a good place to throw an error or prompt the user to login
-        console.log("A frame button was pressed without a signer. Perhaps you want to prompt a login.");
+        console.log("A frame button was pressed without a signer. Perhaps you want to prompt a login");
       },
       signFrameAction,
       async logout() {
@@ -138,12 +99,6 @@ export default function FrameJSRenderer() {
   frameState.onButtonPress = button => {
     console.log("Button pressed", button);
   };
-  if (!currentFrameId)
-    return (
-      <div className="flex bg-base-300 rounded-l-full items-center gap-2 pr-2">
-        <div className="skeleton bg-base-200 w-[35px] h-[35px] rounded-full shrink-0"></div>
-        <div className="skeleton bg-base-200 h-3 w-20"></div>
-      </div>
-    );
+
   return <FrameUI key={currentFrameId} frameState={frameState} components={components} theme={theme} />;
 }

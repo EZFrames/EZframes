@@ -42,18 +42,7 @@ export function parseHtmlString(htmlString: string) {
   };
 }
 
-export function generateHtmlString(parsedObject: any): string {
-  console.log({ parsedObject });
-  if (!parsedObject || parsedObject?.image?.type !== "html") {
-    return "";
-  }
-  console.log("HERE");
-  let styleString = "";
-  if (parsedObject.image?.style) {
-    styleString = Object.entries(parsedObject.image?.style)
-      .map(([key, value]) => `${key}: ${value}`)
-      .join("; ");
-  }
-  // Generate the HTML string with style and content
-  return `<div style="${styleString}">${parsedObject.image.content}</div>`;
-}
+// Example usage
+const htmlInput = `<div style="color: 'black'; height: '300px'; width: '300px'; display: 'flex'; font-size: 60px;"> Select your fruit! </div>`;
+const result = parseHtmlString(htmlInput);
+console.log(result);

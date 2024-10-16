@@ -32,17 +32,8 @@ const NewFrameEditor = () => {
     if (imageUrlOption === "html") {
       const image = parseHtmlString(htmlInput);
       console.log({ image });
-      setCurrentFrame({
-        ...currentFrame, // keep the existing properties of currentFrame
-        // @ts-ignore
-        image: {
-          type: "html",
-          style: image?.image.style,
-          content: image?.image.content,
-        },
-      });
     }
-  }, [htmlInput, imageUrlOption, currentFrame, setCurrentFrame]);
+  }, [htmlInput, imageUrlOption]);
 
   if (!currentFrame) return null;
 

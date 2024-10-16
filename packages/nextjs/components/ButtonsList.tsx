@@ -13,6 +13,7 @@ const ButtonList = () => {
   const [activeButtonIndex, setActiveButtonIndex] = useState<number>(0);
   const [open, setOpen] = useState(false);
   const buttons = currentFrame?.intents.filter(intent => intent.type.includes("Button")) as Intent[];
+  console.log("buttons", buttons);
   if (!currentFrame) return null;
 
   const handleAddButton = () => {

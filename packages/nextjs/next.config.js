@@ -10,15 +10,10 @@ const nextConfig = {
     ignoreDuringBuilds: process.env.NEXT_PUBLIC_IGNORE_BUILD_ERROR === "true",
   },
   images: {
-    minimumCacheTTL: 1,
     remotePatterns: [
       {
-        hostname: "*",
-        protocol: "http",
-      },
-      {
-        hostname: "*",
         protocol: "https",
+        hostname: "**",
       },
     ],
   },
