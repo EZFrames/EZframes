@@ -10,6 +10,7 @@ interface ITransactionSchema extends Document {
   abi: any;
   functionName: string;
   args: any;
+  transactionType: string;
 }
 
 const TransactionSchema: Schema<ITransactionSchema> = new Schema<ITransactionSchema>(
@@ -23,6 +24,7 @@ const TransactionSchema: Schema<ITransactionSchema> = new Schema<ITransactionSch
     abi: Object,
     functionName: String,
     args: Object,
+    transactionType: String,
   },
   {
     timestamps: true,

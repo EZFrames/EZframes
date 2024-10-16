@@ -67,10 +67,9 @@ app.frame(`/:journeyId/:frameId`, async c => {
         return null;
     }
   });
-  const image =
-    frame.image.type === "src" ? frame.image.src : <div style={frame.image.style}>{frame.image.content}</div>;
   return c.res({
-    image: image as string,
+    image: `/${journeyId}/${frameId}/img`,
+    // image: image as string,
     intents,
   });
 });
@@ -112,5 +111,26 @@ app.transaction("/:journeyId/:frameId/send-contract", c => {
   });
 });
 
+app.image("/:journeyId/:frameId/img", async c => {
+  // Corrected regex to match `/journeyId/frameId/img`
+  const match = c.req.path.match(/^\/api\/frog\/([a-zA-Z0-9]+)\/([a-zA-Z0-9]+)\/img$/);
+  if (!match || match.length < 3) {
+    throw new Error("Invalid journey or frame ID");
+  }
+
+  const [, , frameId] = match; // Extract `journeyId` and `frameId`
+  const data: Frame = await getFrameAtServer(frameId);
+  const frame = makeFrogFrame(data.frameJson);
+
+  const image =
+    frame.image.type === "src" ? frame.image.src : <div style={frame.image.style}>{frame.image.content}</div>;
+
+  return c.res({
+    headers: {
+      "Cache-Control": "max-age=0",
+    },
+    image: image as any,
+  });
+});
 export const GET = handle(app);
 export const POST = handle(app);
