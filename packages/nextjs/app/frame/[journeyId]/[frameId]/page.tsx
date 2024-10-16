@@ -10,8 +10,6 @@ type Props = {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const frameid = params.frameId;
   const journeyId = params.journeyId;
-  console.log("frameId", frameid);
-  console.log("journeyId", journeyId);
   try {
     const frameMetadata = await getFrameMetadata(`${APP_URL}/api/frog/${journeyId}/${frameid}`);
     return {
