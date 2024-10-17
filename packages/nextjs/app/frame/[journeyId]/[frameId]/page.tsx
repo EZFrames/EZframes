@@ -6,7 +6,7 @@ type Props = {
   params: { frameId: string; journeyId: string };
   searchParams: { [key: string]: string | string[] | undefined };
 };
-
+export const revalidate = 0;
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const frameid = params.frameId;
   const journeyId = params.journeyId;
