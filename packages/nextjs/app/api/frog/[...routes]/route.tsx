@@ -4,17 +4,25 @@ import { FrameData } from "frog/_lib/types/frame";
 import { devtools } from "frog/dev";
 import { handle } from "frog/next";
 import { serveStatic } from "frog/serve-static";
+import { HtmlEscapedString } from "hono/utils/html";
+import parse from "html-react-parser";
 import { ABI } from "~~/constants";
 import Analytics from "~~/model/analytics";
 import { getFrameAtServer } from "~~/services/frames";
+import { useHtmlStringForJSXElement } from "~~/services/frames/extractHTML";
 import { Frame } from "~~/types/commontypes";
 import { makeFrogFrame } from "~~/utils/general";
 
 const app = new Frog({
   basePath: "/api/frog",
   title: "Frog Frame",
+  headers: {
+    "Cache-Control": "no-store, must-revalidate", // Ensures no caching
+    cache: "no-store", // For any additional cache headers
+  },
 });
 
+export const revalidate = 0;
 const storeAnalytics = async (frameData: FrameData, journeyId: string, frameId: string, type: string) => {
   const analyticsEntry = new Analytics({
     journeyId: journeyId || "",
@@ -67,14 +75,15 @@ app.frame(`/:journeyId/:frameId`, async c => {
         return null;
     }
   });
+  const image = frame.image.type === "src" ? frame.image.src : `/${journeyId}/${frameId}/img`;
   return c.res({
-    image: `/${journeyId}/${frameId}/img`,
-    // image: image as string,
+    headers: {
+      "Cache-Control": "max-age=0",
+    },
+    image: image as string,
     intents,
   });
 });
-
-devtools(app, { serveStatic });
 
 app.transaction("/:journeyId/:frameId/send-ether", async c => {
   const match = c.req.path.match(/\/([a-zA-Z0-9]+)\/([a-zA-Z0-9]+)/);
@@ -112,24 +121,23 @@ app.transaction("/:journeyId/:frameId/send-contract", c => {
 });
 
 app.image("/:journeyId/:frameId/img", async c => {
-  // Corrected regex to match `/journeyId/frameId/img`
   const match = c.req.path.match(/^\/api\/frog\/([a-zA-Z0-9]+)\/([a-zA-Z0-9]+)\/img$/);
   if (!match || match.length < 3) {
     throw new Error("Invalid journey or frame ID");
   }
 
-  const [, , frameId] = match; // Extract `journeyId` and `frameId`
+  const [, , frameId] = match;
   const data: Frame = await getFrameAtServer(frameId);
   const frame = makeFrogFrame(data.frameJson);
-  console.log({ frame });
-  const image = frame.image.type === "src" ? frame.image.src : <div>${frame.image.content}</div>;
-
+  console.log(parse(useHtmlStringForJSXElement(frame.image.content as string).props.html as HtmlEscapedString));
   return c.res({
     headers: {
       "Cache-Control": "max-age=0",
     },
-    image: image as any,
+    image: parse(useHtmlStringForJSXElement(frame.image.content as string).props.html as HtmlEscapedString) as any,
   });
 });
+
+devtools(app, { serveStatic });
 export const GET = handle(app);
 export const POST = handle(app);

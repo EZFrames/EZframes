@@ -3,7 +3,6 @@ import ButtonList from "./ButtonsList";
 import Editor from "@monaco-editor/react";
 import { Button, MenuItem, Select, TextField } from "@mui/material";
 import { useProductJourney } from "~~/providers/ProductProvider";
-import { generateHtmlString, parseHtmlString } from "~~/services/frames/extractHTML";
 import { InternalFrameJSON } from "~~/types/commontypes";
 
 const FrameEditor = () => {
@@ -28,13 +27,16 @@ const FrameEditor = () => {
   };
 
   useEffect(() => {
-    setImageUrl(currentFrame?.image?.src || "");
     setTextInput(currentFrame?.intents.find(intent => intent.type === "TextInput"));
     if (currentFrame?.image?.type === "html") {
       setImageUrlOption("html");
-      setHtmlInput(generateHtmlString(currentFrame as any));
+      setHtmlInput(currentFrame?.image?.content || "");
+    } else {
+      setImageUrlOption("url");
+      setImageUrl(currentFrame?.image?.src || "");
+      setHtmlInput("");
     }
-  }, [currentFrame]);
+  }, [currentFrame, currentFrame?.image?.src]);
 
   // This effect will run only when the user clicks "Done" for the HTML input
   useEffect(() => {
@@ -49,7 +51,6 @@ const FrameEditor = () => {
       setHtmlDone(false);
     }
   }, [htmlDone, imageUrlOption, htmlInput, setCurrentFrame]);
-  console.log({ currentFrame });
   if (!currentFrame) return null;
   return (
     <div className="bg-white flex flex-col gap-4 p-4 h-[100%]">

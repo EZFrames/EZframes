@@ -1,3 +1,5 @@
+import { createElement } from "hono/jsx";
+
 export function parseHtmlString(htmlString: string) {
   const tempDiv = document.createElement("div");
   tempDiv.innerHTML = htmlString;
@@ -49,6 +51,13 @@ export function escapeHtml(htmlString: string) {
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#39;");
+}
+
+export function useHtmlStringForJSXElement(htmlString: string) {
+  const jsxElement = createElement("html", {
+    html: htmlString,
+  });
+  return jsxElement;
 }
 
 export function generateHtmlString(parsedObject: any): string {
