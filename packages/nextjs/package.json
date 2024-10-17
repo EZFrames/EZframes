@@ -57,6 +57,7 @@
     "react-copy-to-clipboard": "^5.1.0",
     "react-dom": "^18.2.0",
     "react-hot-toast": "^2.4.0",
+    "react-jsx-parser": "^2.2.0",
     "sanitize-html": "^2.13.1",
     "satori": "^0.10.14",
     "satori-html": "^0.3.2",

@@ -1,17 +1,83 @@
 /** @jsxImportSource frog/jsx */
+import * as cheerio from "cheerio";
 import { Button, Frog, TextInput, parseEther } from "frog";
 import { FrameData } from "frog/_lib/types/frame";
 import { devtools } from "frog/dev";
 import { handle } from "frog/next";
 import { serveStatic } from "frog/serve-static";
-import { HtmlEscapedString } from "hono/utils/html";
 import parse from "html-react-parser";
 import { ABI } from "~~/constants";
 import Analytics from "~~/model/analytics";
 import { getFrameAtServer } from "~~/services/frames";
-import { useHtmlStringForJSXElement } from "~~/services/frames/extractHTML";
+import { escapeHtml } from "~~/services/frames/extractHTML";
 import { Frame } from "~~/types/commontypes";
 import { makeFrogFrame } from "~~/utils/general";
+
+type JSXNode = {
+  tag: string;
+  props: {
+    [key: string]: any;
+    children?: (JSXNode | string)[];
+  };
+  children?: (JSXNode | string)[];
+  key?: string | undefined;
+  isEscaped?: boolean;
+  localContexts?: undefined;
+};
+
+function parseHtmlToJsxNode(html: string): JSXNode {
+  const $ = cheerio.load(html);
+  function parseElement(element): JSXNode {
+    const tag = element.tagName || ""; // Get the tag name
+    const attribs = element.attribs || {}; // Get the attributes
+
+    // Handle children
+    const children: (JSXNode | string)[] = [];
+    $(element)
+      .contents()
+      .each((_, el) => {
+        if (el.type === "text") {
+          // If it's text, just push it as a string
+          children.push($(el).text().trim()); // Trim whitespace around text
+        } else if (el.type === "tag") {
+          // If it's an element, parse recursively
+          children.push(parseElement(el));
+        }
+      });
+
+    // Convert the style string to an object if it exists
+    const styleString = attribs.style || '';
+    const styleObject = parseStyleString(styleString);
+
+    return {
+      tag,
+      props: {
+        ...attribs,
+        style: styleObject, // Set the style as an object
+        children, // Add children
+      },
+      children,
+      isEscaped: true, // Set this as per your requirement
+      localContexts: undefined,
+    };
+  }
+  const rootElement = $("body").children().first();
+  return parseElement(rootElement[0]);
+}
+
+function parseStyleString(style: string): Record<string, string> {
+  return style
+    .split(";") // Split styles by semicolon
+    .filter(Boolean) // Remove empty strings
+    .map(rule => rule.split(':')) // Split each rule by colon
+    .filter(pair => pair.length === 2) // Keep only valid pairs
+    .reduce((acc, [key, value]) => {
+      const trimmedKey = key.trim().replace(/-([a-z])/g, g => g[1].toUpperCase()); // Convert to camelCase
+      const trimmedValue = value.trim();
+      acc[trimmedKey] = trimmedValue; // Add to accumulator
+      return acc;
+    }, {} as Record<string, string>);
+}
 
 const app = new Frog({
   basePath: "/api/frog",
@@ -23,6 +89,7 @@ const app = new Frog({
 });
 
 export const revalidate = 0;
+
 const storeAnalytics = async (frameData: FrameData, journeyId: string, frameId: string, type: string) => {
   const analyticsEntry = new Analytics({
     journeyId: journeyId || "",
@@ -129,14 +196,141 @@ app.image("/:journeyId/:frameId/img", async c => {
   const [, , frameId] = match;
   const data: Frame = await getFrameAtServer(frameId);
   const frame = makeFrogFrame(data.frameJson);
-  console.log(parse(useHtmlStringForJSXElement(frame.image.content as string).props.html as HtmlEscapedString));
+
+  const str = `<div style="
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background-color: rgba(20, 30, 48, 0.8);
+        border-radius: 15px;
+        padding: 20px;
+        max-width: 900px;
+        width: 100%;
+    ">
+        <h1 style="
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 30px;
+            letter-spacing: -0.02em;
+            text-transform: uppercase;
+        ">
+            Asset Overview: <span style="color: #FFD700;">ENZF</span>
+        </h1>
+        <div style="
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            padding: 20px;
+        ">
+            <!-- Card for Owner -->
+            <div style="
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                background-color: #2C3E50;
+                border-radius: 15px;
+                padding: 20px;
+                min-width: 250px;
+                box-shadow: 0 2px 15px rgba(0, 0, 0, 0.3);
+                margin: 10px;
+            ">
+                <h2 style="font-size: 24px; margin-bottom: 10px;">Owner</h2>
+                <p style="font-size: 20px; font-weight: 500;">0x2a161c6bb94d03a6284431330f1217e72df9ad9d</p>
+            </div>
+
+            <!-- Card for Share Price -->
+            <div style="
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                background-color: #2C3E50;
+                border-radius: 15px;
+                padding: 20px;
+                min-width: 250px;
+                box-shadow: 0 2px 15px rgba(0, 0, 0, 0.3);
+                margin: 10px;
+            ">
+                <h2 style="font-size: 24px; margin-bottom: 10px;">Share Price</h2>
+                <p style="font-size: 20px; font-weight: 500;">0.4963 DAI</p>
+            </div>
+
+            <!-- Card for Net Asset Value -->
+            <div style="
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                background-color: #2C3E50;
+                border-radius: 15px;
+                padding: 20px;
+                min-width: 250px;
+                box-shadow: 0 2px 15px rgba(0, 0, 0, 0.3);
+                margin: 10px;
+            ">
+                <h2 style="font-size: 24px; margin-bottom: 10px;">Net Asset Value</h2>
+                <p style="font-size: 20px; font-weight: 500;">1,590,796.31 DAI</p>
+            </div>
+
+            <!-- Card for Gross Asset Value -->
+            <div style="
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                background-color: #2C3E50;
+                border-radius: 15px;
+                padding: 20px;
+                min-width: 250px;
+                box-shadow: 0 2px 15px rgba(0, 0, 0, 0.3);
+                margin: 10px;
+            ">
+                <h2 style="font-size: 24px; margin-bottom: 10px;">Gross Asset Value</h2>
+                <p style="font-size: 20px; font-weight: 500;">1,592,712.94 DAI</p>
+            </div>
+        </div>
+
+        <div style="
+            margin-top: 40px;
+            font-size: 20px;
+            display: flex;
+            justify-content: center;
+        ">
+            <strong>Data as of:</strong> Real-time blockchain info
+        </div>
+    </div>`;
+  const actualHTML = (
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        background: "linear-gradient(to right, #141E30, #243B55)",
+        height: "100vh",
+        color: "white",
+        padding: "20px",
+        textAlign: "center",
+      }}
+    >
+      Mondo Duplantis <div> JEJEEsksksksksksksksksk randipao</div>
+    </div>
+  );
+  const parsedHTML = parseHtmlToJsxNode(frame.image.content as string);
+
+  console.log("parsed", parsedHTML);
+  console.log("actual", actualHTML);
   return c.res({
     headers: {
       "Cache-Control": "max-age=0",
     },
-    image: parse(useHtmlStringForJSXElement(frame.image.content as string).props.html as HtmlEscapedString) as any,
-  });
+    image: parsedHTML,
 });
+})
 
 devtools(app, { serveStatic });
 export const GET = handle(app);
