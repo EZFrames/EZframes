@@ -122,8 +122,7 @@ app.image("/:journeyId/:frameId/img", async c => {
   const data: Frame = await getFrameAtServer(frameId);
   const frame = makeFrogFrame(data.frameJson);
 
-  const image =
-    frame.image.type === "src" ? frame.image.src : <div style={frame.image.style}>{frame.image.content}</div>;
+  const image = frame.image.type === "src" ? frame.image.src : frame.image.content;
 
   return c.res({
     headers: {

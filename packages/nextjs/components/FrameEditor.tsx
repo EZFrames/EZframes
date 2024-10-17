@@ -4,6 +4,7 @@ import Editor from "@monaco-editor/react";
 import { Button, MenuItem, Select, TextField } from "@mui/material";
 import { useProductJourney } from "~~/providers/ProductProvider";
 import { generateHtmlString, parseHtmlString } from "~~/services/frames/extractHTML";
+import { InternalFrameJSON } from "~~/types/commontypes";
 
 const FrameEditor = () => {
   const { frame, setFrame, currentFrame, setCurrentFrame } = useProductJourney();
@@ -38,18 +39,14 @@ const FrameEditor = () => {
   // This effect will run only when the user clicks "Done" for the HTML input
   useEffect(() => {
     if (imageUrlOption === "html" && htmlDone) {
-      const image = parseHtmlString(htmlInput);
-      console.log({ image });
-
-      setCurrentFrame(prevFrame => ({
+      setCurrentFrame((prevFrame: InternalFrameJSON) => ({
         ...prevFrame,
         image: {
           type: "html",
-          style: image?.image.style,
-          content: image?.image.content,
+          content: htmlInput,
         },
       }));
-      setHtmlDone(false); // Reset the state after parsing HTML
+      setHtmlDone(false);
     }
   }, [htmlDone, imageUrlOption, htmlInput, setCurrentFrame]);
   console.log({ currentFrame });

@@ -2,7 +2,7 @@ import { FrameMetadataType } from "@coinbase/onchainkit";
 import { Abi } from "viem";
 import { InternalFrameJSON } from "~~/types/commontypes";
 
-export const APP_URL = "http://localhost:3001";
+export const APP_URL = "http://localhost:3000";
 export const ENZYME_API_KEY = process.env.ENZYME_API_KEY;
 export const txFrame = {
   buttons: [

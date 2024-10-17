@@ -42,6 +42,15 @@ export function parseHtmlString(htmlString: string) {
   };
 }
 
+export function escapeHtml(htmlString: string) {
+  return htmlString
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
 export function generateHtmlString(parsedObject: any): string {
   console.log({ parsedObject });
   if (!parsedObject || parsedObject?.image?.type !== "html") {
