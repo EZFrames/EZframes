@@ -8,7 +8,8 @@ import { ABI } from "~~/constants";
 import Analytics from "~~/model/analytics";
 import { getFrameAtServer } from "~~/services/frames";
 import { Frame } from "~~/types/commontypes";
-import { makeFrogFrame, parseHtmlToJsxNode } from "~~/utils/general";
+import { makeFrogFrame } from "~~/utils/general";
+import { parseHtmlToJsxNode } from "~~/utils/htmlHelpers";
 
 const app = new Frog({
   basePath: "/api/frog",
@@ -74,7 +75,6 @@ app.frame(`/:journeyId/:frameId`, async c => {
   if (c.req.method === "POST") {
     storeAnalytics(c.frameData as FrameData, journeyId, frameId, "submit-frame");
   }
-  // await storeAnalytics(c.frameData as FrameData, journeyId, frameId[1], "render-frame");
   const data: Frame = await getFrameAtServer(frameId);
   const frame = makeFrogFrame(data.frameJson);
   const intents = frame.intents.map((intent: any) => {
