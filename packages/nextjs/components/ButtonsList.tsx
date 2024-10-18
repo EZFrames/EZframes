@@ -45,7 +45,6 @@ const ButtonList = () => {
     if (!button) return;
     const newButtons = [...currentFrame.intents];
     newButtons[activeButtonIndex] = button;
-    console.log(newButtons);
     setCurrentFrame({
       ...currentFrame,
       intents: newButtons,

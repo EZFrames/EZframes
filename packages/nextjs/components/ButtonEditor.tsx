@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import CustomButton from "./Button/CustomButton";
+import { Editor } from "@monaco-editor/react";
 import { MenuItem, Select, TextField } from "@mui/material";
 import { APP_URL } from "~~/constants";
 import { useProductJourney } from "~~/providers/ProductProvider";
@@ -30,7 +31,7 @@ const chainIds = {
 const ButtonEditor = ({ button, onSave, onDelete }: ButtonEditorProps) => {
   const { frames: dbFrames, frame, productID } = useProductJourney();
   const [frames, setFrames] = useState<Frame[] | undefined>();
-  const [frameTxConfig, setFrameTxConfig] = useState<object | undefined>();
+  const [frameTxConfig, setFrameTxConfig] = useState<any | undefined>();
   useEffect(() => {
     if (dbFrames) {
       Promise.all(dbFrames.map(frame => getFrameById(frame)))
@@ -214,7 +215,7 @@ const ButtonEditor = ({ button, onSave, onDelete }: ButtonEditorProps) => {
               <Select
                 id="chainId"
                 size="small"
-                value=""
+                value={frameTxConfig?.chainId}
                 variant="outlined"
                 onChange={e => {
                   setFrameTxConfig({ ...frameTxConfig, chainId: e.target.value });
@@ -258,7 +259,7 @@ const ButtonEditor = ({ button, onSave, onDelete }: ButtonEditorProps) => {
               <Select
                 id="chainId"
                 size="small"
-                value=""
+                value={frameTxConfig?.chainId}
                 variant="outlined"
                 onChange={e => {
                   setFrameTxConfig({ ...frameTxConfig, chainId: e.target.value });
@@ -282,7 +283,7 @@ const ButtonEditor = ({ button, onSave, onDelete }: ButtonEditorProps) => {
                 }}
               />
               <label htmlFor="value" className="block text-sm font-medium text-gray-700 mb-1">
-                Contract Address (fetch ABI)
+                Contract Address
               </label>
               <TextField
                 id="value"
@@ -301,6 +302,42 @@ const ButtonEditor = ({ button, onSave, onDelete }: ButtonEditorProps) => {
                 value=""
                 onChange={e => {
                   setFrameTxConfig({ ...frameTxConfig, functionName: e.target.value });
+                }}
+              />
+              <label htmlFor="args" className="block text-sm font-medium text-gray-700 mb-1">
+                ABI
+              </label>
+              <Editor
+                theme="vs-dark"
+                height="100%"
+                language="array"
+                value={frameTxConfig?.abi}
+                onChange={value => {
+                  if (!value) return;
+                  setFrameTxConfig({ ...frameTxConfig, abi: JSON.parse(value) });
+                }}
+                options={{
+                  minimap: { enabled: false },
+                  fontSize: 14,
+                  padding: { top: 8 },
+                }}
+              />
+              <label htmlFor="args" className="block text-sm font-medium text-gray-700 mb-1">
+                Args
+              </label>
+              <Editor
+                theme="vs-dark"
+                height="100%"
+                language="array"
+                value={frameTxConfig?.args}
+                onChange={value => {
+                  if (!value) return;
+                  setFrameTxConfig({ ...frameTxConfig, args: JSON.parse(value) });
+                }}
+                options={{
+                  minimap: { enabled: false },
+                  fontSize: 14,
+                  padding: { top: 8 },
                 }}
               />
             </>
