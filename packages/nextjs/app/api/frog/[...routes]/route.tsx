@@ -5,11 +5,9 @@ import { FrameData } from "frog/_lib/types/frame";
 import { devtools } from "frog/dev";
 import { handle } from "frog/next";
 import { serveStatic } from "frog/serve-static";
-import parse from "html-react-parser";
 import { ABI } from "~~/constants";
 import Analytics from "~~/model/analytics";
 import { getFrameAtServer } from "~~/services/frames";
-import { escapeHtml } from "~~/services/frames/extractHTML";
 import { Frame } from "~~/types/commontypes";
 import { makeFrogFrame } from "~~/utils/general";
 
@@ -196,134 +194,7 @@ app.image("/:journeyId/:frameId/img", async c => {
   const [, , frameId] = match;
   const data: Frame = await getFrameAtServer(frameId);
   const frame = makeFrogFrame(data.frameJson);
-
-  const str = `<div style="
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        background-color: rgba(20, 30, 48, 0.8);
-        border-radius: 15px;
-        padding: 20px;
-        max-width: 900px;
-        width: 100%;
-    ">
-        <h1 style="
-            font-size: 48px;
-            font-weight: 700;
-            margin-bottom: 30px;
-            letter-spacing: -0.02em;
-            text-transform: uppercase;
-        ">
-            Asset Overview: <span style="color: #FFD700;">ENZF</span>
-        </h1>
-        <div style="
-            display: flex;
-            flex-direction: row;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 20px;
-            padding: 20px;
-        ">
-            <!-- Card for Owner -->
-            <div style="
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-                background-color: #2C3E50;
-                border-radius: 15px;
-                padding: 20px;
-                min-width: 250px;
-                box-shadow: 0 2px 15px rgba(0, 0, 0, 0.3);
-                margin: 10px;
-            ">
-                <h2 style="font-size: 24px; margin-bottom: 10px;">Owner</h2>
-                <p style="font-size: 20px; font-weight: 500;">0x2a161c6bb94d03a6284431330f1217e72df9ad9d</p>
-            </div>
-
-            <!-- Card for Share Price -->
-            <div style="
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-                background-color: #2C3E50;
-                border-radius: 15px;
-                padding: 20px;
-                min-width: 250px;
-                box-shadow: 0 2px 15px rgba(0, 0, 0, 0.3);
-                margin: 10px;
-            ">
-                <h2 style="font-size: 24px; margin-bottom: 10px;">Share Price</h2>
-                <p style="font-size: 20px; font-weight: 500;">0.4963 DAI</p>
-            </div>
-
-            <!-- Card for Net Asset Value -->
-            <div style="
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-                background-color: #2C3E50;
-                border-radius: 15px;
-                padding: 20px;
-                min-width: 250px;
-                box-shadow: 0 2px 15px rgba(0, 0, 0, 0.3);
-                margin: 10px;
-            ">
-                <h2 style="font-size: 24px; margin-bottom: 10px;">Net Asset Value</h2>
-                <p style="font-size: 20px; font-weight: 500;">1,590,796.31 DAI</p>
-            </div>
-
-            <!-- Card for Gross Asset Value -->
-            <div style="
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-                background-color: #2C3E50;
-                border-radius: 15px;
-                padding: 20px;
-                min-width: 250px;
-                box-shadow: 0 2px 15px rgba(0, 0, 0, 0.3);
-                margin: 10px;
-            ">
-                <h2 style="font-size: 24px; margin-bottom: 10px;">Gross Asset Value</h2>
-                <p style="font-size: 20px; font-weight: 500;">1,592,712.94 DAI</p>
-            </div>
-        </div>
-
-        <div style="
-            margin-top: 40px;
-            font-size: 20px;
-            display: flex;
-            justify-content: center;
-        ">
-            <strong>Data as of:</strong> Real-time blockchain info
-        </div>
-    </div>`;
-  const actualHTML = (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        background: "linear-gradient(to right, #141E30, #243B55)",
-        height: "100vh",
-        color: "white",
-        padding: "20px",
-        textAlign: "center",
-      }}
-    >
-      Mondo Duplantis <div> JEJEEsksksksksksksksksk randipao</div>
-    </div>
-  );
   const parsedHTML = parseHtmlToJsxNode(frame.image.content as string);
-
-  console.log("parsed", parsedHTML);
-  console.log("actual", actualHTML);
   return c.res({
     headers: {
       "Cache-Control": "max-age=0",

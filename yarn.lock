@@ -4238,6 +4238,7 @@ __metadata:
     react-copy-to-clipboard: "npm:^5.1.0"
     react-dom: "npm:^18.2.0"
     react-hot-toast: "npm:^2.4.0"
+    react-jsx-parser: "npm:^2.2.0"
     sanitize-html: "npm:^2.13.1"
     satori: "npm:^0.10.14"
     satori-html: "npm:^0.3.2"
@@ -5117,6 +5118,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/react-dom@npm:^18.3.0":
+  version: 18.3.1
+  resolution: "@types/react-dom@npm:18.3.1"
+  dependencies:
+    "@types/react": "npm:*"
+  checksum: 10c0/8b416551c60bb6bd8ec10e198c957910cfb271bc3922463040b0d57cf4739cdcd24b13224f8d68f10318926e1ec3cd69af0af79f0291b599a992f8c80d47f1eb
+  languageName: node
+  linkType: hard
+
 "@types/react-transition-group@npm:^4.4.10":
   version: 4.4.10
   resolution: "@types/react-transition-group@npm:4.4.10"
@@ -5133,6 +5143,16 @@ __metadata:
     "@types/prop-types": "npm:*"
     csstype: "npm:^3.0.2"
   checksum: 10c0/fe455f805c5da13b89964c3d68060cebd43e73ec15001a68b34634604a78140e6fc202f3f61679b9d809dde6d7a7c2cb3ed51e0fd1462557911db09879b55114
+  languageName: node
+  linkType: hard
+
+"@types/react@npm:^18.3.3":
+  version: 18.3.11
+  resolution: "@types/react@npm:18.3.11"
+  dependencies:
+    "@types/prop-types": "npm:*"
+    csstype: "npm:^3.0.2"
+  checksum: 10c0/ce80512246ca5bda69db85b9f4f1835189334acfb6b2c4f3eda8cabff1ff1a3ea9ce4f3b895bdbc18c94140aa45592331aa3fdeb557f525c1b048de7ce84fc0e
   languageName: node
   linkType: hard
 
@@ -6475,6 +6495,15 @@ __metadata:
   bin:
     acorn: bin/acorn
   checksum: 10c0/51fb26cd678f914e13287e886da2d7021f8c2bc0ccc95e03d3e0447ee278dd3b40b9c57dc222acd5881adcf26f3edc40901a4953403232129e3876793cd17386
+  languageName: node
+  linkType: hard
+
+"acorn@npm:^8.12.1":
+  version: 8.13.0
+  resolution: "acorn@npm:8.13.0"
+  bin:
+    acorn: bin/acorn
+  checksum: 10c0/f35dd53d68177c90699f4c37d0bb205b8abe036d955d0eb011ddb7f14a81e6fd0f18893731c457c1b5bd96754683f4c3d80d9a5585ddecaa53cdf84e0b3d68f7
   languageName: node
   linkType: hard
 
@@ -15567,6 +15596,26 @@ __metadata:
   version: 18.3.1
   resolution: "react-is@npm:18.3.1"
   checksum: 10c0/f2f1e60010c683479e74c63f96b09fb41603527cd131a9959e2aee1e5a8b0caf270b365e5ca77d4a6b18aae659b60a86150bb3979073528877029b35aecd2072
+  languageName: node
+  linkType: hard
+
+"react-jsx-parser@npm:^2.2.0":
+  version: 2.2.0
+  resolution: "react-jsx-parser@npm:2.2.0"
+  dependencies:
+    "@types/react": "npm:^18.3.3"
+    "@types/react-dom": "npm:^18.3.0"
+    acorn: "npm:^8.12.1"
+    acorn-jsx: "npm:^5.3.2"
+  peerDependencies:
+    react: ">=18"
+    react-dom: ">=18"
+  dependenciesMeta:
+    "@types/react":
+      optional: true
+    "@types/react-dom":
+      optional: true
+  checksum: 10c0/379724cd921302b76d5d0d794938c540d0005b7b6f3a38dbb30c6b698c45bd43119b51d4493ad2b0bc5c630a597dfa834131064b07b0ef0437e7c27256bb6272
   languageName: node
   linkType: hard
 

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ButtonList from "./ButtonsList";
 import Editor from "@monaco-editor/react";
-import { Button, MenuItem, Select, TextField } from "@mui/material";
+import { Button, MenuItem, Select, TextField, Dialog, DialogActions, DialogContent } from "@mui/material";
 import { useProductJourney } from "~~/providers/ProductProvider";
 import { InternalFrameJSON } from "~~/types/commontypes";
 
@@ -9,6 +9,7 @@ const FrameEditor = () => {
   const { frame, setFrame, currentFrame, setCurrentFrame } = useProductJourney();
   const [imageUrlOption, setImageUrlOption] = useState("url");
   const [htmlInput, setHtmlInput] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false); // State to track modal open/close
   // @ts-ignore
   const [imageUrl, setImageUrl] = useState(currentFrame?.image.src || "");
   const [textInput, setTextInput] = useState<any>(undefined);
@@ -38,7 +39,6 @@ const FrameEditor = () => {
     }
   }, [currentFrame, currentFrame?.image?.src]);
 
-  // This effect will run only when the user clicks "Done" for the HTML input
   useEffect(() => {
     if (imageUrlOption === "html" && htmlDone) {
       setCurrentFrame((prevFrame: InternalFrameJSON) => ({
@@ -51,7 +51,14 @@ const FrameEditor = () => {
       setHtmlDone(false);
     }
   }, [htmlDone, imageUrlOption, htmlInput, setCurrentFrame]);
+
+  const handleModalClose = () => {
+    setHtmlDone(true); // Ensure the HTML is processed
+    setIsModalOpen(false); // Close the modal
+  };
+
   if (!currentFrame) return null;
+
   return (
     <div className="bg-white flex flex-col gap-4 p-4 h-[100%]">
       <label className="block text-sm font-medium text-gray-700">Frame Name</label>
@@ -113,15 +120,26 @@ const FrameEditor = () => {
               setHtmlInput(value);
             }}
           />
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={() => {
-              setHtmlDone(true); // Trigger the effect to parse HTML
-            }}
-          >
-            Done
-          </Button>
+          <div className="flex gap-2">
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => {
+                setHtmlDone(true); // Trigger the effect to parse HTML
+              }}
+            >
+              Done
+            </Button>
+            <Button
+              variant="contained"
+              color="secondary"
+              onClick={() => {
+                setIsModalOpen(true); // Open the modal for fullscreen editor
+              }}
+            >
+              Expand Editor
+            </Button>
+          </div>
         </div>
       )}
       {textInput ? (
@@ -176,7 +194,30 @@ const FrameEditor = () => {
           Add Text Input
         </button>
       )}
+
       <ButtonList />
+
+      {/* Modal for full-page HTML editor */}
+      <Dialog open={isModalOpen} onClose={handleModalClose} fullWidth maxWidth="xl">
+        <DialogContent style={{ padding: "0px" }}>
+          <Editor
+            theme="vs-dark"
+            height="90vh"
+            width="100%"
+            language="html"
+            value={htmlInput}
+            onChange={value => {
+              if (!value) return;
+              setHtmlInput(value);
+            }}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button variant="contained" color="primary" onClick={handleModalClose}>
+            Done
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 };
