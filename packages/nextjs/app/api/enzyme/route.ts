@@ -1,8 +1,7 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { ENZYME_API_KEY } from "~~/constants";
 
-
-export async function GET(req: NextRequest) {
+export async function GET() {
   try {
     const myHeaders = new Headers();
     myHeaders.append("content-type", "application/json");

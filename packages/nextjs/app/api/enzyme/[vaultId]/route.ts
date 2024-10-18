@@ -7,7 +7,7 @@ export async function GET(req: NextRequest, { params }: { params: { vaultId: str
     const myHeaders = new Headers();
     myHeaders.append("content-type", "application/json");
     myHeaders.append("authorization", `Bearer ${ENZYME_API_KEY}`);
-    console.log(ENZYME_API_KEY);
+    console.log("vaultId", req, vaultId);
     const raw = JSON.stringify({
       address: vaultId,
     });
