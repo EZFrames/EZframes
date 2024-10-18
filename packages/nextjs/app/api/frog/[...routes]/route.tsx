@@ -44,7 +44,7 @@ function parseHtmlToJsxNode(html: string): JSXNode {
       });
 
     // Convert the style string to an object if it exists
-    const styleString = attribs.style || '';
+    const styleString = attribs.style || "";
     const styleObject = parseStyleString(styleString);
 
     return {
@@ -67,7 +67,7 @@ function parseStyleString(style: string): Record<string, string> {
   return style
     .split(";") // Split styles by semicolon
     .filter(Boolean) // Remove empty strings
-    .map(rule => rule.split(':')) // Split each rule by colon
+    .map(rule => rule.split(":")) // Split each rule by colon
     .filter(pair => pair.length === 2) // Keep only valid pairs
     .reduce((acc, [key, value]) => {
       const trimmedKey = key.trim().replace(/-([a-z])/g, g => g[1].toUpperCase()); // Convert to camelCase
@@ -83,6 +83,35 @@ const app = new Frog({
   headers: {
     "Cache-Control": "no-store, must-revalidate", // Ensures no caching
     cache: "no-store", // For any additional cache headers
+  },
+  imageOptions: {
+    /* Other default options */
+    fonts: [
+      {
+        name: "Open Sans",
+        weight: 400,
+        source: "google",
+      },
+      {
+        name: "Open Sans",
+        weight: 700,
+        source: "google",
+      },
+      {
+        name: "Madimi One",
+        source: "google",
+      },
+      {
+        name: "Inter",
+        source: "google",
+        weight: 400,
+      },
+      {
+        name: "Inter",
+        source: "google",
+        weight: 700,
+      },
+    ],
   },
 });
 
@@ -200,8 +229,8 @@ app.image("/:journeyId/:frameId/img", async c => {
       "Cache-Control": "max-age=0",
     },
     image: parsedHTML,
+  });
 });
-})
 
 devtools(app, { serveStatic });
 export const GET = handle(app);
