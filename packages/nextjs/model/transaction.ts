@@ -1,6 +1,6 @@
 import mongoose, { Document, Schema } from "mongoose";
 
-interface ITransactionSchema extends Document {
+export interface ITransactionSchema extends Document {
   frameId: string;
   chainId: string;
   to: string;

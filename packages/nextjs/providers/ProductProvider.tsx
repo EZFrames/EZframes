@@ -2,6 +2,7 @@ import { PropsWithChildren, createContext, useContext, useEffect, useMemo, useSt
 import { useParams } from "next/navigation";
 import { UseMutationResult, UseQueryResult, useMutation, useQuery } from "@tanstack/react-query";
 import { queryClient } from "~~/components/ScaffoldEthAppWithProviders";
+import { ITransactionSchema } from "~~/model/transaction";
 import { getFrameById } from "~~/services/frames";
 import { Frame, Intent, InternalFrameJSON, Journey } from "~~/types/commontypes";
 
@@ -23,6 +24,11 @@ interface IProductJourney {
   frames: string[] | undefined;
   buttons: Intent[] | undefined;
   textInput: Intent | undefined;
+  frameTxConfig: ITransactionSchema | null;
+  setFrameTxConfig: React.Dispatch<React.SetStateAction<ITransactionSchema | null>>;
+  createTxConfig: UseMutationResult<ITransactionSchema, Error, Omit<ITransactionSchema, "_id">>;
+  getTxConfig: UseQueryResult<ITransactionSchema, Error>;
+  updateTxConfig: UseMutationResult<ITransactionSchema, Error, ITransactionSchema>;
 }
 
 const ProductJourney = createContext<IProductJourney | null>(null);
@@ -36,7 +42,7 @@ const useProduct = () => {
   const [frame, setFrame] = useState<Frame | null>(null);
   const [currentFrameId, setCurrentFrameId] = useState<string | null>(null);
   const [currentFrame, setCurrentFrame] = useState<InternalFrameJSON | null>(null);
-
+  const [frameTxConfig, setFrameTxConfig] = useState<ITransactionSchema | null>(null);
   const productQuery = useQuery({
     queryKey: ["product", productID],
     queryFn: async () => {
@@ -105,6 +111,57 @@ const useProduct = () => {
       setCurrentFrame(data.frameJson);
       productQuery.refetch();
       queryClient.invalidateQueries({ queryKey: ["frames"] });
+    },
+  });
+
+  const createTxConfig = useMutation({
+    mutationFn: async (txConfig: Omit<ITransactionSchema, "_id">) => {
+      const response = await fetch(`/api/transactions`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(txConfig),
+      });
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      const data = await response.json();
+      return data;
+    },
+    onSettled: data => {
+      setFrameTxConfig(data);
+    },
+  });
+
+  const getTxConfig = useQuery({
+    queryKey: ["txConfig", frameTxConfig?._id],
+    queryFn: async () => {
+      const response = await fetch(`/api/transactions/${currentFrameId}`);
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      return response.json();
+    },
+  });
+
+  const updateTxConfig = useMutation({
+    mutationFn: async (txConfig: ITransactionSchema) => {
+      const response = await fetch(`/api/transactions/${currentFrameId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(txConfig),
+      });
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      const data = await response.json();
+      return data;
+    },
+    onSettled: data => {
+      setFrameTxConfig(data);
     },
   });
 
@@ -196,6 +253,11 @@ const useProduct = () => {
     frames,
     buttons,
     textInput,
+    frameTxConfig,
+    setFrameTxConfig,
+    createTxConfig,
+    getTxConfig,
+    updateTxConfig,
   };
 };
 

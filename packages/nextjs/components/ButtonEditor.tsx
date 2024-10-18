@@ -29,9 +29,8 @@ const chainIds = {
 };
 
 const ButtonEditor = ({ button, onSave, onDelete }: ButtonEditorProps) => {
-  const { frames: dbFrames, frame, productID } = useProductJourney();
+  const { frames: dbFrames, frame, productID, frameTxConfig, setFrameTxConfig } = useProductJourney();
   const [frames, setFrames] = useState<Frame[] | undefined>();
-  const [frameTxConfig, setFrameTxConfig] = useState<any | undefined>();
   useEffect(() => {
     if (dbFrames) {
       Promise.all(dbFrames.map(frame => getFrameById(frame)))
@@ -235,7 +234,7 @@ const ButtonEditor = ({ button, onSave, onDelete }: ButtonEditorProps) => {
                 size="small"
                 value=""
                 onChange={e => {
-                  setFrameTxConfig({ ...frameTxConfig, toAddress: e.target.value });
+                  setFrameTxConfig({ ...frameTxConfig, to: e.target.value });
                 }}
               />
               <label htmlFor="value" className="block text-sm font-medium text-gray-700 mb-1">
