@@ -2,13 +2,13 @@ import { createFrame, saveFrame, saveJourney } from "../frames";
 import { getBuyFrame, getDescriptionFrame, getEmailFrame, getProductFrame, getSuccessFrame } from "./frameGetters";
 import { GetGitcoinDescriptionFrame, GetGitcoinLogoFrame } from "./gitcoinFrameGetters";
 import { FrameMetadataType } from "@coinbase/onchainkit";
-import { TRIAL_FRAME } from "~~/constants";
+import { INITIAL_FRAME } from "~~/constants";
 import { InternalFrameJSON } from "~~/types/commontypes";
 
 export const initJourneyWithFrames = async (journeyId: string, productImage: string) => {
   const frames = [];
   for (let i = 0; i <= 4; i++) {
-    const frameBody: InternalFrameJSON = TRIAL_FRAME;
+    const frameBody: InternalFrameJSON = INITIAL_FRAME as InternalFrameJSON;
     const frame = await createFrame({
       name: "Frame",
       frameJson: frameBody,
@@ -16,7 +16,6 @@ export const initJourneyWithFrames = async (journeyId: string, productImage: str
     });
     frames.push(frame._id);
   }
-  // First Frame
   const productFrameJson = getProductFrame(frames[1], frames[2], productImage);
   await saveFrame({
     _id: frames[0],
@@ -24,7 +23,6 @@ export const initJourneyWithFrames = async (journeyId: string, productImage: str
     frameJson: productFrameJson,
     connectedTo: [frames[1], frames[2]],
   });
-  // Second Frame
   const descriptionFrame = getDescriptionFrame(frames[0], frames[2]);
   await saveFrame({
     _id: frames[1],
@@ -32,7 +30,6 @@ export const initJourneyWithFrames = async (journeyId: string, productImage: str
     frameJson: descriptionFrame,
     connectedTo: [frames[0], frames[2]],
   });
-  // Third Frame
   const emailFrameJson = getEmailFrame(frames[3], productImage);
   await saveFrame({
     _id: frames[2],
@@ -40,7 +37,6 @@ export const initJourneyWithFrames = async (journeyId: string, productImage: str
     frameJson: emailFrameJson,
     connectedTo: [frames[3]],
   });
-  // Fourth Frame
   const buyFrameJSON = getBuyFrame(frames[4]);
   await saveFrame({
     _id: frames[3],
@@ -48,8 +44,6 @@ export const initJourneyWithFrames = async (journeyId: string, productImage: str
     frameJson: buyFrameJSON,
     connectedTo: [frames[4]],
   });
-
-  //Fifth Frame
   const successFrameJSON = getSuccessFrame();
   await saveFrame({
     _id: frames[4],
@@ -57,7 +51,6 @@ export const initJourneyWithFrames = async (journeyId: string, productImage: str
     frameJson: successFrameJSON,
     connectedTo: [],
   });
-  console.log(successFrameJSON, "successFrameJSON");
   const journey = await saveJourney({
     _id: journeyId,
     frames: frames,

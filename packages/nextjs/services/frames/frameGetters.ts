@@ -50,8 +50,8 @@ export const getDescriptionFrame = (previousFrameId: string, nextFrameId: string
       },
     ],
     image: {
-      type: "src",
-      src: "https://via.placeholder.com/150",
+      type: "html",
+      content: `<div style="display:flex;padding: 20px; background-color: #f1f1f1; text-align: center;">Description</div>`,
     },
   };
   return DESCRIPTION_FRAME;
