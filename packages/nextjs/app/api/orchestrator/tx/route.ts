@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { FrameRequest, FrameTransactionResponse } from "@coinbase/onchainkit/lib/frame/types";
-import { encodeFunctionData, parseEther } from "viem";
+import { FrameRequest, FrameTransactionResponse } from "@coinbase/onchainkit/src/frame";
+import { encodeFunctionData } from "viem";
 import { ABI, contract, myAddress } from "~~/constants";
 import { getJourneyById } from "~~/services/frames";
 import { Journey } from "~~/types/commontypes";
@@ -21,10 +21,11 @@ export async function POST(req: NextRequest): Promise<NextResponse<FrameTransact
   }
   console.log({ journey });
   const address = myAddress;
+  console.log({ address });
   const callData = encodeFunctionData({
     abi: ABI,
-    functionName: "trf",
-    args: [address, parseEther("0.001"), BigInt(untrustedData?.inputText || 1)],
+    functionName: "store",
+    args: [1],
   });
   return NextResponse.json({
     chainId: "eip155:137",
