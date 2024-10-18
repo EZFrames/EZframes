@@ -17,7 +17,6 @@ export function parseHtmlToJsxNode(html: string): JSXNode {
   function parseElement(element: any): JSXNode {
     const tag = element.tagName || ""; // Get the tag name
     const attribs = element.attribs || {}; // Get the attributes
-
     // Handle children
     const children: (JSXNode | string)[] = [];
     $(element)
@@ -49,6 +48,7 @@ export function parseHtmlToJsxNode(html: string): JSXNode {
     };
   }
   const rootElement = $("body").children().first();
+  console.log(rootElement);
   return parseElement(rootElement[0]);
 }
 

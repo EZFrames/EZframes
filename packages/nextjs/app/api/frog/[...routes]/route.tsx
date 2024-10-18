@@ -106,6 +106,7 @@ app.frame(`/:journeyId/:frameId`, async c => {
   return c.res({
     headers: {
       "Cache-Control": "max-age=0",
+      "cache-control": "max-age=0",
     },
     image: image as string,
     intents,
@@ -160,8 +161,9 @@ app.image("/:journeyId/:frameId/img", async c => {
   return c.res({
     headers: {
       "Cache-Control": "max-age=0",
+      "cache-control": "max-age=0",
     },
-    image: parsedHTML as any,
+    image: parsedHTML,
   });
 });
 

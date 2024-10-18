@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Plus } from "lucide-react";
-import { TRIAL_FRAME } from "~~/constants";
+import { INITIAL_FRAME } from "~~/constants";
 import { useProductJourney } from "~~/providers/ProductProvider";
 import { getFrameById } from "~~/services/frames";
 import { Frame, InternalFrameJSON } from "~~/types/commontypes";
@@ -32,7 +32,7 @@ function FrameSidebar() {
   const onCreate = async () => {
     await createFrame.mutateAsync({
       name: "Frame",
-      frameJson: TRIAL_FRAME as InternalFrameJSON,
+      frameJson: INITIAL_FRAME as InternalFrameJSON,
       connectedTo: [],
     });
   };

@@ -1,42 +1,8 @@
-import { FrameMetadataType } from "@coinbase/onchainkit";
 import { Abi } from "viem";
 import { InternalFrameJSON } from "~~/types/commontypes";
 
-export const APP_URL = "http://localhost:3000";
+export const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "http:localhost:3000";
 export const ENZYME_API_KEY = process.env.ENZYME_API_KEY;
-export const txFrame = {
-  buttons: [
-    {
-      action: "tx",
-      label: "purchase",
-      postUrl: `${APP_URL}/api/orchestrator/1`,
-      target: "",
-    },
-  ],
-  image: {
-    src: `https://amber-causal-cougar-937.mypinata.cloud/ipfs/QmafH4oZDZWFynGyK9gHVvPRFTTFFrbwYwGQNps4FDLky2`,
-  },
-  input: {
-    text: "Enter No of items",
-  },
-  state: {},
-} as FrameMetadataType;
-
-export const emailFrame = {
-  buttons: [
-    {
-      action: "post",
-      label: "Generate Receipt",
-      target: ``,
-    },
-  ],
-  image: {
-    src: `https://amber-causal-cougar-937.mypinata.cloud/ipfs/QmcGop9sCSmcNktWcRXsokE9wjjcWqLhhMhWL3CywkqGXZ`,
-  },
-  input: {
-    text: "Enter your email",
-  },
-} as FrameMetadataType;
 
 export const DEFAULT_FRAME = {
   image: `<div style={{ color: 'black',height:'300px',width:'300px', display: 'flex', fontSize: 60 }}> Select your fruit! </div>`,
@@ -47,20 +13,10 @@ export const DEFAULT_FRAME = {
   ]`,
 };
 
-export const TRIAL_FRAME: InternalFrameJSON = {
+export const INITIAL_FRAME: InternalFrameJSON = {
   image: {
     type: "html",
-    style: {
-      backgroundColor: "white",
-      borderRadius: "10px",
-      border: "1px solid #ccc",
-      color: "black",
-      display: "flex",
-      justifyContent: "center",
-      fontSize: 60,
-      textAlign: "center",
-    },
-    content: `Select your fruit!`,
+    content: `<div style={{ color: 'black',height:'300px',width:'300px', display: 'flex', fontSize: 60 }}> Select your fruit! </div>`,
   },
   intents: [
     {
