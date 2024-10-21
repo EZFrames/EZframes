@@ -4,7 +4,8 @@ import defaultImageLoader from "next/dist/shared/lib/image-loader";
 import Image, { ImageLoaderProps } from "next/image";
 import { fallbackFrameContext } from "@frames.js/render";
 import { type FarcasterSigner, signFrameAction } from "@frames.js/render/farcaster";
-import { FrameUI, type FrameUIComponents, type FrameUITheme } from "@frames.js/render/ui";
+import { type FrameUIComponents, type FrameUITheme } from "@frames.js/render/ui";
+import { FrameUI } from "@frames.js/render/ui";
 import { useFrame } from "@frames.js/render/use-frame";
 import { APP_URL } from "~~/constants";
 import { useProductJourney } from "~~/providers/ProductProvider";
@@ -138,12 +139,13 @@ export default function FrameJSRenderer() {
   frameState.onButtonPress = button => {
     console.log("Button pressed", button);
   };
-  if (!currentFrameId)
+  if (!currentFrameId || !frameState) {
     return (
       <div className="flex bg-base-300 rounded-l-full items-center gap-2 pr-2">
         <div className="skeleton bg-base-200 w-[35px] h-[35px] rounded-full shrink-0"></div>
         <div className="skeleton bg-base-200 h-3 w-20"></div>
       </div>
     );
+  }
   return <FrameUI key={currentFrameId} frameState={frameState} components={components} theme={theme} />;
 }

@@ -2,8 +2,7 @@
 
 import type { NextPage } from "next";
 import FrameEditor from "~~/components/FrameEditor";
-import FrameJSRenderer from "~~/components/FrameJSRenderer";
-// import FrameRender from "~~/components/FrameRenderer";
+import FrameRender from "~~/components/FrameRenderer";
 import FrameSidebar from "~~/components/FramesSidebar";
 import { ProvideProduct } from "~~/providers/ProductProvider";
 
@@ -15,7 +14,7 @@ const Product: NextPage = () => {
           <FrameSidebar />
         </div>
         <div className="col-span-3 mt-4">
-          <FrameJSRenderer />
+          <FrameRender />
         </div>
         <div className="col-span-2 flex-grow h-[95vh]">
           <FrameEditor />

@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "start": "next dev",
-    "build": "next build",
+    "build": "DISABLE_ESLINT_PLUGIN=true next build",
     "serve": "next start",
     "lint": "next lint",
     "format": "prettier --write . '!(node_modules|.next|contracts)/**/*'",
@@ -23,6 +23,7 @@
     "@emotion/react": "^11.13.0",
     "@emotion/styled": "^11.13.0",
     "@ethereum-attestation-service/eas-sdk": "^2.5.0",
+    "@frames.js/render": "^0.3.16",
     "@heroicons/react": "^2.0.11",
     "@monaco-editor/react": "^4.6.0",
     "@mui/material": "^5.16.6",

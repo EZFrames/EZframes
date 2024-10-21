@@ -1,46 +1,103 @@
+/* eslint-disable @next/next/no-img-element */
+import { APP_URL } from "~~/constants";
 import { useProductJourney } from "~~/providers/ProductProvider";
+import { useState } from "react";
+
+/**
+ * By default, there are no styles so it is up to you to style the components as you wish.
+ */
+const theme = {
+  ButtonsContainer: {
+    className: "flex gap-[8px] px-2 pb-2 bg-white",
+  },
+  Button: {
+    className: "border text-sm text-gray-700 rounded flex-1 bg-white border-gray-300 p-2",
+  },
+  Root: {
+    className: "flex flex-col w-full gap-2 border rounded-lg overflow-hidden bg-white relative",
+  },
+  Error: {
+    className:
+      "flex text-red-500 text-sm p-2 bg-white border border-red-500 rounded-md shadow-md aspect-square justify-center items-center",
+  },
+  LoadingScreen: {
+    className: "absolute top-0 left-0 right-0 bottom-0 bg-gray-300 z-10",
+  },
+  Image: {
+    className: "w-full object-cover max-h-full",
+  },
+  ImageContainer: {
+    className: "relative w-full h-full border-b border-gray-300 overflow-hidden",
+    style: {
+      aspectRatio: 1.91,
+    },
+  },
+  TextInput: {
+    className: "p-[6px] border rounded border-gray-300 box-border w-full",
+  },
+  TextInputContainer: {
+    className: "w-full px-2",
+  },
+  Skeleton: {
+    className: "h-full w-full bg-gray-300 animate-pulse", // Skeleton style
+  },
+};
 
 function FrameRender() {
-  const { currentFrame, buttons, textInput } = useProductJourney();
+  const { currentFrame, buttons, textInput, currentFrameId, productID } = useProductJourney();
+  const [imageLoaded, setImageLoaded] = useState(false); // State to track image loading
+
   if (!currentFrame) return null;
+
   return (
-    <>
-      {/*@ts-ignore */}
-      {currentFrame.image.type === "html" && <div style={frame.image.props.style}>{frame.image.content}</div>}
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      {currentFrame.image.type === "src" && <img src={currentFrame.image.src} alt="Product" />}
-      {textInput && (
-        <input
-          className="w-full p-2 border mt-1 border-gray-400 rounded bg-white" // Set background color to white
-          type="text"
-          placeholder={textInput?.props?.placeholder}
-        />
-      )}
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          marginTop: "4px",
-          gap: "4px",
-        }}
-      >
-        {buttons?.map((intent: any, index: number) => {
-          return (
-            <button
-              type="button"
-              className="btn bg-black rounded-md text-white px-4 py-2"
-              style={{
-                flex: "1 1 0px",
-                cursor: "pointer",
-              }}
-              key={index}
-            >
-              {intent.content}
-            </button>
-          );
-        })}
+    <div className={theme.Root.className}>
+      {/* Image container for the image */}
+      <div className={theme.ImageContainer.className} style={theme.ImageContainer.style}>
+        {!imageLoaded && <div className={theme.Skeleton.className} />} {/* Show skeleton while loading */}
+        
+        {/* Rendering the image based on its type using the components defined in the theme */}
+        {currentFrame.image.type === "html" && (
+          <img
+            src={`${APP_URL}/api/frog/${productID}/${currentFrameId}/img`}
+            alt="Frame HTML Image"
+            className={theme.Image.className}
+            onLoad={() => setImageLoaded(true)} // Set loaded state on image load
+          />
+        )}
+        {currentFrame.image.type === "src" && (
+          <img
+            src={currentFrame.image.src}
+            alt="Frame image"
+            className={theme.Image.className}
+            onLoad={() => setImageLoaded(true)} // Set loaded state on image load
+          />
+        )}
       </div>
-    </>
+
+      {/* Render TextInput using the styled component from the theme */}
+      {textInput && (
+        <div className={theme.TextInputContainer.className}>
+          <input className={theme.TextInput.className} type="text" placeholder={textInput?.props?.placeholder} />
+        </div>
+      )}
+
+      {/* Rendering buttons */}
+      <div className={theme.ButtonsContainer.className}>
+        {buttons?.map((intent: any, index: number) => (
+          <button
+            type="button"
+            className={theme.Button.className}
+            key={index}
+            style={{
+              flex: "1 1 0px",
+              cursor: "pointer",
+            }}
+          >
+            {intent.content}
+          </button>
+        ))}
+      </div>
+    </div>
   );
 }
 

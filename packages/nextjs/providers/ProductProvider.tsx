@@ -2,6 +2,7 @@ import { PropsWithChildren, createContext, useContext, useEffect, useMemo, useSt
 import { useParams } from "next/navigation";
 import { UseMutationResult, UseQueryResult, useMutation, useQuery } from "@tanstack/react-query";
 import { queryClient } from "~~/components/ScaffoldEthAppWithProviders";
+import { APP_URL } from "~~/constants";
 import { getFrameById } from "~~/services/frames";
 import { Frame, Intent, InternalFrameJSON, Journey } from "~~/types/commontypes";
 
@@ -22,6 +23,7 @@ interface IProductJourney {
   htmlToImage: UseMutationResult<{ image: string }, Error, { html: string }>;
   frames: string[] | undefined;
   buttons: Intent[] | undefined;
+  frameMetadata: UseQueryResult<any, Error>;
   textInput: Intent | undefined;
 }
 
@@ -46,6 +48,7 @@ const useProduct = () => {
       }
       return response.json();
     },
+    enabled: !!productID,
   });
 
   const updateProduct = useMutation({
@@ -178,6 +181,20 @@ const useProduct = () => {
   }, [journey]);
   const buttons = currentFrame?.intents.filter(intent => intent.type.includes("Button"));
   const textInput = currentFrame?.intents.find(intent => intent.type === "TextInput");
+
+  const frameMetadata = useQuery({
+    queryKey: ["frameMetadata", productID, currentFrameId],
+    queryFn: async () => {
+      console.log("Fetching Frame Metadata", `${APP_URL}/frame/${productID}/${currentFrameId}`);
+      const response = await fetch(`${APP_URL}/frame/${productID}/${currentFrameId}`);
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      return response.json();
+    },
+    enabled: !!productID || !!currentFrameId,
+  });
+
   return {
     productID,
     productQuery,
@@ -196,6 +213,7 @@ const useProduct = () => {
     frames,
     buttons,
     textInput,
+    frameMetadata,
   };
 };
 

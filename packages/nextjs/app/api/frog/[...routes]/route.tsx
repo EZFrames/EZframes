@@ -163,7 +163,8 @@ app.image("/:journeyId/:frameId/img", async c => {
       "Cache-Control": "max-age=0",
       "cache-control": "max-age=0",
     },
-    image: parsedHTML,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    image: parsedHTML as any,
   });
 });
 
