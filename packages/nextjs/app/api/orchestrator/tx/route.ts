@@ -28,7 +28,7 @@ export async function POST(req: NextRequest): Promise<NextResponse<FrameTransact
   const callData = encodeFunctionData({
     abi: ABI,
     functionName: "mintNFT",
-    args: [myAddress],
+    args: [],
   });
   return NextResponse.json({
     chainId: "eip155:137",
