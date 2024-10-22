@@ -1,15 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
-import { FrameRequest, FrameTransactionResponse } from "@coinbase/onchainkit/src/frame";
+import { FrameRequest, FrameTransactionResponse } from "@coinbase/onchainkit/lib/frame/types";
 import { encodeFunctionData, parseEther } from "viem";
 import { ABI, contract, myAddress } from "~~/constants";
 import { getJourneyById } from "~~/services/frames";
 import { Journey } from "~~/types/commontypes";
 
 export async function POST(req: NextRequest): Promise<NextResponse<FrameTransactionResponse>> {
+  console.log("hey")
   const body: FrameRequest = await req.json();
   const { untrustedData } = body;
   let state;
+  console.log(untrustedData)
   if (untrustedData?.state && typeof untrustedData.state === "string") {
+    
     state = JSON.parse(decodeURIComponent(untrustedData?.state as string));
   }
   const journeyId = state?.journey_id || "";
@@ -23,8 +26,8 @@ export async function POST(req: NextRequest): Promise<NextResponse<FrameTransact
   const address = myAddress;
   const callData = encodeFunctionData({
     abi: ABI,
-    functionName: "store",
-    args: [1],
+    functionName: "mintNFT",
+    args: [address],
   });
   return NextResponse.json({
     chainId: "eip155:137",
