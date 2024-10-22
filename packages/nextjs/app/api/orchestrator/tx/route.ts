@@ -4,6 +4,7 @@ import { encodeFunctionData, parseEther } from "viem";
 import { ABI, contract, myAddress } from "~~/constants";
 import { getJourneyById } from "~~/services/frames";
 import { Journey } from "~~/types/commontypes";
+import { storeAnalytics } from "~~/utils/analytics";
 
 export async function POST(req: NextRequest): Promise<NextResponse<FrameTransactionResponse>> {
   console.log("hey")
@@ -23,11 +24,11 @@ export async function POST(req: NextRequest): Promise<NextResponse<FrameTransact
     journey = await getJourneyById(journeyId);
   }
   console.log({ journey });
-  const address = myAddress;
+  storeAnalytics(body, state).catch(err => console.error("Error Saving Analytics", err));
   const callData = encodeFunctionData({
     abi: ABI,
     functionName: "mintNFT",
-    args: [address],
+    args: [myAddress],
   });
   return NextResponse.json({
     chainId: "eip155:137",
