@@ -24,10 +24,10 @@ export const menuLinks: HeaderMenuLink[] = [
     label: "Dashboard",
     href: "/dashboard",
   },
-  {
-    label: "Analytics",
-    href: "/analytics",
-  },
+  // {
+  //   label: "Analytics",
+  //   href: "/analytics",
+  // },
   {
     label: "FAQS",
     href: "/faqs",

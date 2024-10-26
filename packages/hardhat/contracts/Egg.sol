@@ -12,12 +12,12 @@ contract EGG is ERC721URIStorage {
 		baseTokenURI = _baseTokenURI; // Set base URI (image link) at contract deployment
 	}
 
-	function mintNFT(address recipient) public returns (uint256) {
+	function mintNFT() public returns (uint256) {
 		_tokenIds += 1;
 		uint256 newItemId = _tokenIds;
 
 		// Mint the token
-		_mint(recipient, newItemId);
+		_mint(msg.sender, newItemId);
 
 		// Set the token URI to the base URI for each minted NFT
 		_setTokenURI(newItemId, baseTokenURI);
