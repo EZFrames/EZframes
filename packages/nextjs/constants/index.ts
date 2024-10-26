@@ -2,7 +2,7 @@ import { FrameMetadataType } from "@coinbase/onchainkit";
 import { Abi } from "viem";
 import { InternalFrameJSON } from "~~/types/commontypes";
 
-export const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://228c-110-226-176-11.ngrok-free.app";
+export const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://ezframes.xyz";
 export const ENZYME_API_KEY = process.env.ENZYME_API_KEY;
 
 export const INITIAL_FRAME: InternalFrameJSON = {

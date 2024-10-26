@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { ENZYME_API_KEY } from "~~/constants";
+import { ENZYME_API_KEY } from "../../../../constants";
 
 export async function GET(req: NextRequest, { params }: { params: { vaultId: string } }) {
   try {
