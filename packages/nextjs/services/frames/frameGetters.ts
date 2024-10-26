@@ -1,127 +1,121 @@
-import { FrameMetadataType } from "@coinbase/onchainkit";
-import { APP_URL, DEFAULT_FRAME } from "~~/constants";
+import { APP_URL } from "~~/constants";
+import { InternalFrameJSON } from "~~/types/commontypes";
 
-export const GetDefaultFrame = async (journey_id: string) => {
-  const frame: FrameMetadataType = DEFAULT_FRAME;
-  if (frame.state) {
-    // @ts-ignore
-    frame.state.journey_id = journey_id;
-  }
-  return frame;
-};
-
-export const GetProductFrame = (
-  journey_id: string,
-  frame_id: string,
-  frame_id_2: string,
-  frame_id_3: string,
-  productImage: any,
-) => {
-  const PRODUCT_FRAME: FrameMetadataType = {
-    buttons: [
+export const getProductFrame = (frame_id_2: string, frame_id_3: string, productImage: string) => {
+  const PRODUCT_FRAME: InternalFrameJSON = {
+    intents: [
       {
-        action: "post",
-        target: APP_URL + "/api/orchestrator/" + frame_id_2,
-        label: "Get Details",
+        type: "Button",
+        props: {
+          action: "post",
+          target: APP_URL + "/api/orchestrator/" + frame_id_2,
+        },
+        content: "Get Details",
       },
       {
-        action: "post",
-        target: APP_URL + "/api/orchestrator/" + frame_id_3,
-        label: "Buy Now",
+        type: "Button",
+        props: {
+          action: "post",
+          target: APP_URL + "/api/orchestrator/" + frame_id_3,
+        },
+        content: "Buy Now",
       },
     ],
     image: {
+      type: "src",
       src: productImage,
-    },
-    state: {
-      journey_id: journey_id,
-      frame_id: frame_id,
     },
   };
   return PRODUCT_FRAME;
 };
 
-export const GetDescriptionFrame = (journey_id: string, frame_id: string, next_frame_id: string) => {
-  const DESCRIPTION_FRAME: FrameMetadataType = {
-    buttons: [
+export const getDescriptionFrame = (previousFrameId: string, nextFrameId: string) => {
+  const DESCRIPTION_FRAME: InternalFrameJSON = {
+    intents: [
       {
-        action: "post",
-        target: APP_URL + "/api/orchestrator/" + next_frame_id,
-        label: "Buy Now",
+        type: "Button",
+        props: {
+          action: "post",
+          target: APP_URL + "/api/orchestrator/" + previousFrameId,
+        },
+        content: "Back",
+      },
+      {
+        type: "Button",
+        props: {
+          action: "post",
+          target: APP_URL + "/api/orchestrator/" + nextFrameId,
+        },
+        content: "Next",
       },
     ],
     image: {
-      src: "https://via.placeholder.com/150",
-    },
-    state: {
-      journey_id: journey_id,
-      frame_id: frame_id,
+      type: "html",
+      content: `<div style="display:flex;padding: 20px; background-color: #f1f1f1; text-align: center;">Description</div>`,
     },
   };
   return DESCRIPTION_FRAME;
 };
 
-export const GetEmailFrame = (journey_id: string, frame_id: string, next_frame_id: string, productImage: string) => {
-  const EMAIL_FRAME: FrameMetadataType = {
-    buttons: [
+export const getEmailFrame = (frameId: string, productImage: string) => {
+  const EMAIL_FRAME: InternalFrameJSON = {
+    intents: [
       {
-        action: "post",
-        target: APP_URL + "/api/orchestrator/" + next_frame_id,
-        label: "Next",
+        type: "Button",
+        props: {
+          action: "post",
+          target: APP_URL + "/api/orchestrator/" + frameId,
+        },
+        content: "Next",
+      },
+      {
+        type: "TextInput",
+        props: {
+          placeholder: "Enter your email address",
+        },
       },
     ],
     image: {
+      type: "src",
       src: productImage,
-    },
-    state: {
-      journey_id: journey_id,
-      frame_id: frame_id,
-    },
-    input: {
-      text: "Enter your email address",
     },
   };
   return EMAIL_FRAME;
 };
 
-export const GetBuyFrame = (journey_id: string, frame_id: string, next_frame_id: string) => {
-  const newTxFrame = {
-    buttons: [
+export const getBuyFrame = (next_frame_id: string) => {
+  const newTxFrame: InternalFrameJSON = {
+    intents: [
       {
-        action: "tx",
-        label: "Buy",
-        target: `${APP_URL}/api/orchestrator/tx`,
-        postUrl: `${APP_URL}/api/orchestrator/` + next_frame_id,
+        type: "Button.Transaction",
+        props: {
+          target: `${APP_URL}/api/orchestrator/tx`,
+          action: `${APP_URL}/api/orchestrator/` + next_frame_id,
+        },
+        content: "Buy",
       },
     ],
     image: {
+      type: "src",
       src: `https://amber-causal-cougar-937.mypinata.cloud/ipfs/QmafH4oZDZWFynGyK9gHVvPRFTTFFrbwYwGQNps4FDLky2`,
     },
-    input: {
-      text: "Enter No of items",
-    },
-    state: {
-      journey_id: journey_id,
-      frame_id: frame_id,
-    },
-  } as FrameMetadataType;
+  };
   return newTxFrame;
 };
 
-export const GetSuccessFrame = (journey_id: string, frame_id: string) => {
-  const SUCCESS_FRAME: FrameMetadataType = {
+export const getSuccessFrame = () => {
+  const SUCCESS_FRAME: InternalFrameJSON = {
     image: {
+      type: "src",
       src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTW_BNf9b9fUN735sATwS1OfxlfV-LD9RhVMA&s",
     },
-    state: {
-      journey_id: journey_id,
-      frame_id: frame_id,
-    },
-    buttons: [
+    intents: [
       {
-        action: "link",
-        target: APP_URL,
-        label: "Finish",
+        type: "Button.Link",
+        props: {
+          href: `${APP_URL}/dashboard`,
+        },
+        content: "Check your journey here!",
       },
     ],
   };

@@ -12,7 +12,7 @@ interface ModalProps {
 }
 
 const FarcasterModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
-  const { productQuery, frame } = useProductJourney();
+  const { productQuery, frame, productID } = useProductJourney();
   const [frames, setFrames] = useState<Frame[] | undefined>(undefined);
   const [currentFrameId, setCurrentFrameId] = useState<string>(frame?._id as string);
 
@@ -58,7 +58,7 @@ const FarcasterModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
           className="btn btn-success"
           variant="contained"
           onClick={() => {
-            window.navigator.clipboard.writeText(`${APP_URL}/frame/${currentFrameId}`);
+            window.navigator.clipboard.writeText(`${APP_URL}/v1/frame/${productID}/${currentFrameId}`);
             notification.success("Link copied to clipboard");
           }}
         >

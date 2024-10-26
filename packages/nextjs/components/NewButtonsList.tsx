@@ -1,18 +1,17 @@
 import { useState } from "react";
-import CustomButton from "./Button/CustomButton";
 import ButtonEditor from "./ButtonEditor";
 import FarcasterModal from "./FarcasterModal";
-import { IconButton } from "@mui/material";
-import { PlusIcon } from "@heroicons/react/24/outline";
+import { Plus, Save, Share2, Trash2 } from "lucide-react";
 import { useProductJourney } from "~~/providers/ProductProvider";
 import { Intent, InternalFrameJSON } from "~~/types/commontypes";
 import { notification } from "~~/utils/scaffold-eth";
 
-const ButtonList = () => {
+const NewButtonList = () => {
   const { currentFrame, setCurrentFrame, frame, saveFrame, deleteFrame } = useProductJourney();
   const [activeButtonIndex, setActiveButtonIndex] = useState<number>(0);
   const [open, setOpen] = useState(false);
   const buttons = currentFrame?.intents.filter(intent => intent.type.includes("Button")) as Intent[];
+
   if (!currentFrame) return null;
 
   const handleAddButton = () => {
@@ -45,7 +44,6 @@ const ButtonList = () => {
     if (!button) return;
     const newButtons = [...currentFrame.intents];
     newButtons[activeButtonIndex] = button;
-    console.log(newButtons);
     setCurrentFrame({
       ...currentFrame,
       intents: newButtons,
@@ -68,59 +66,58 @@ const ButtonList = () => {
   };
 
   return (
-    <div className="mb-4 flex flex-col gap-4">
+    <div className="space-y-3">
+      {/* Header Row */}
       <div className="flex items-center">
-        <label htmlFor="buttons" className="block text-sm font-medium text-gray-700 ">
-          Buttons
-        </label>
-        {/* @ts-ignore*/}
-        {buttons?.length < 4 && (
-          <IconButton onClick={handleAddButton}>
-            <PlusIcon className="w-4 h-4 text-gray-700 border-2 border-black" />
-          </IconButton>
-        )}
+        <div className="flex items-center gap-2">
+          <h3 className="font-semibold text-sm">Buttons</h3>
+          {buttons?.length < 4 && (
+            <button onClick={handleAddButton} className="btn btn-ghost btn-xs btn-square" title="Add new button">
+              <Plus className="w-3 h-3" />
+            </button>
+          )}
+        </div>
       </div>
-      <div className="flex flex-wrap gap-2">
+
+      {/* Button Grid */}
+      <div className="grid grid-cols-4 gap-2">
         {buttons.map((button, index) => (
           <button
             key={index}
-            className="btn bg-black rounded-md text-white px-4 py-2"
-            style={{
-              flex: "1 1 0px",
-              cursor: "pointer",
-            }}
+            className={`btn btn-sm ${activeButtonIndex === index ? "btn-primary" : "btn-outline"} w-full`}
             onClick={() => handleButtonClick(index)}
           >
             {button.content}
           </button>
         ))}
       </div>
-      {/* @ts-ignore */}
+
+      {/* Button Editor */}
       {buttons[activeButtonIndex] && (
-        <ButtonEditor button={buttons[activeButtonIndex]} onSave={handleSave} onDelete={handleDelete} />
+        <div className="card bg-base-200 p-3 rounded-lg">
+          <ButtonEditor button={buttons[activeButtonIndex]} onSave={handleSave} onDelete={handleDelete} />
+        </div>
       )}
-      <div className="flex items-center">
-        <CustomButton
-          // @ts-ignore
-          onClick={() => {
-            deleteFrame.mutateAsync(frame?._id as string);
-          }}
-          buttonType="delete"
-          variant="contained"
-          size="small"
-        >
+
+      <div className="flex justify-between">
+        <button onClick={handleSaveFrame} className="btn btn-success btn-sm gap-1">
+          <Save className="w-3 h-3" />
+          Save
+        </button>
+        <button onClick={() => setOpen(!open)} className="btn btn-primary btn-sm gap-1">
+          <Share2 className="w-3 h-3" />
+          Export
+        </button>
+        <button onClick={() => deleteFrame.mutateAsync(frame?._id as string)} className="btn btn-error btn-sm gap-1">
+          <Trash2 className="w-3 h-3" />
           Delete Frame
-        </CustomButton>
-        <CustomButton buttonType="success" variant="contained" onClick={handleSaveFrame}>
-          Save Frame
-        </CustomButton>
-        <button onClick={() => setOpen(!open)} className="btn btn-primary mt-2 flex items-center justify-center">
-          Export Product
         </button>
       </div>
+
+      {/* Modal */}
       {open && <FarcasterModal isOpen={open} onClose={() => setOpen(false)} />}
     </div>
   );
 };
 
-export default ButtonList;
+export default NewButtonList;

@@ -9,8 +9,8 @@ import { ProvideProduct } from "~~/providers/ProductProvider";
 const Product: NextPage = () => {
   return (
     <ProvideProduct>
-      <div className="grid grid-cols-6 gap-4 ">
-        <div className="col-span-1 flex-grow h-[95vh]">
+      <div className="grid grid-cols-6 gap-4 border-r border-gray-500">
+        <div className="col-span-1 flex-grow h-[100vh] borde ">
           <FrameSidebar />
         </div>
         <div className="col-span-3 mt-4">

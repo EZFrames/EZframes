@@ -44,7 +44,9 @@
   },
   "packageManager": "yarn@4.4.0",
   "dependencies": {
-    "@coinbase/onchainkit": "^0.33.6",
-    "permissionless": "^0.1.44"
+    "@frames.js/render": "^0.3.14",
+    "lucide-react": "^0.451.0",
+    "permissionless": "^0.1.44",
+    "recharts": "^2.12.7"
   }
 }

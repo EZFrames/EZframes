@@ -1,55 +1,24 @@
 import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { Plus } from "lucide-react";
+import { INITIAL_FRAME } from "~~/constants";
 import { useProductJourney } from "~~/providers/ProductProvider";
 import { getFrameById } from "~~/services/frames";
-import { GetDefaultFrame } from "~~/services/frames/frameGetters";
-import { Frame } from "~~/types/commontypes";
+import { Frame, InternalFrameJSON } from "~~/types/commontypes";
 
-const thumbnailImageStyle = {
-  width: "100%",
-  maxWidth: "100%",
-  height: "auto",
-  maxHeight: "90%",
-  borderRadius: "5px",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-};
-const sidebarStyle = {
-  height: "90%",
-  padding: "10px",
-  overflowY: "auto",
-  boxSizing: "border-box",
-};
-
-const thumbnailStyle = {
-  padding: "10px",
-  height: "150px",
-  marginBottom: "10px",
-  boxShadow: "2px 2px 2px grey",
-  cursor: "pointer",
-  borderWidth: "2px",
-  borderStyle: "solid",
-  borderColor: "black",
-  borderRadius: "15px",
-  transition: "background-color 0.3s",
-};
-const thumbnailActiveStyle = {
-  ...thumbnailStyle,
-  backgroundColor: "#c0c0c0",
-};
 function FrameSidebar() {
-  const { productQuery, productID, frame, setFrame, setCurrentFrame, createFrame } = useProductJourney();
+  const { productQuery, frame, setFrame, setCurrentFrame, createFrame, currentFrameId, setCurrentFrameId } =
+    useProductJourney();
   const [frames, setFrames] = useState<Frame[] | undefined>(undefined);
-  const [currentFrameId, setCurrentFrameId] = useState<string>(frame?._id as string);
 
   const framesQuery = useQuery({
-    queryKey: ["frames", productQuery.data], // Query key
+    queryKey: ["frames", productQuery.data],
     queryFn: () => {
       if (!productQuery.data) return;
       return Promise.all(productQuery?.data?.frames.map(frame => getFrameById(frame)));
     },
   });
+
   useEffect(() => {
     if (framesQuery.data) {
       setFrames(framesQuery?.data);
@@ -58,40 +27,57 @@ function FrameSidebar() {
 
   useEffect(() => {
     setCurrentFrameId(frame?._id as string);
-  }, [frame]);
+  }, [frame, setCurrentFrameId]);
 
   const onCreate = async () => {
     await createFrame.mutateAsync({
       name: "Frame",
-      frameJson: await GetDefaultFrame(productID),
+      frameJson: INITIAL_FRAME as InternalFrameJSON,
+      connectedTo: [],
     });
   };
+
   if (!frames) return null;
+
   return (
-    <div className="bg-white flex flex-col p-4 h-[100%]">
-      <div style={sidebarStyle as React.CSSProperties}>
-        {frames.map(slide => (
-          <div
-            key={slide._id}
-            style={slide._id === currentFrameId ? thumbnailActiveStyle : thumbnailStyle}
-            onClick={() => {
-              setCurrentFrameId(slide._id as string);
-              setFrame(slide);
-              setCurrentFrame(slide.frameJson);
-            }}
-          >
-            {/*@ts-ignore*/}
-            <img src={slide?.frameJson?.image.src} alt={slide?.name} style={thumbnailImageStyle} />
-            <div style={{ alignItems: "center", justifyContent: "center", display: "flex", marginTop: "-0px" }}>
-              {slide.name}
-            </div>
-          </div>
-        ))}
+    <div className="flex h-full flex-col bg-white">
+      <div className="mt-1 p-3 pb-1 border-b b1rder-gray-200">
+        <h1 className="text-lg font-semibold">Frames</h1>
       </div>
-      <div className="mt-auto flex justify-center w-full">
-        <button onClick={onCreate} className="btn btn-primary w-full">
-          Create
-        </button>
+      {/* Frames List */}
+      <div className="flex-1 overflow-y-auto p-3 mt-1">
+        <div className="space-y-2">
+          {frames.map(slide => (
+            <button
+              key={slide._id}
+              onClick={() => {
+                setCurrentFrameId(slide._id as string);
+                setFrame(slide);
+                setCurrentFrame(slide.frameJson);
+              }}
+              className={`
+                w-full rounded-lg px-4 py-2 text-left transition-all
+                ${
+                  slide._id === currentFrameId
+                    ? "bg-blue-50 text-blue-700 ring-2 ring-blue-200"
+                    : "hover:bg-gray-50 text-gray-700 hover:text-gray-900"
+                }
+              `}
+            >
+              <div className="flex items-center gap-2">
+                <div className="h-2 w-2 rounded-full bg-current opacity-75" />
+                <span className="text-sm font-medium">{slide.name}</span>
+              </div>
+            </button>
+          ))}
+          <button
+            onClick={onCreate}
+            className="flex w-full items-center justify-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700"
+          >
+            <Plus className="h-4 w-4" />
+            Add Frame
+          </button>
+        </div>
       </div>
     </div>
   );

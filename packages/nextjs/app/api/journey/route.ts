@@ -5,7 +5,6 @@ import connectDB from "~~/services/connectDB";
 export async function GET() {
   await connectDB();
   const journeys = await Journey.find();
-  console.log(journeys);
   return new NextResponse(JSON.stringify(journeys));
 }
 
