@@ -1,6 +1,7 @@
 import mongoose, { Document, Schema } from "mongoose";
 
 interface Analytics extends Document {
+  _id: string;
   journeyId: string;
   frameId: string;
   fid: string;

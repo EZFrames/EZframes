@@ -43,11 +43,7 @@ const evmNetworks = [
     chainId: chain.id,
     name: chain.name,
     rpcUrls: Object.values(chain.rpcUrls).map(({ http }) => http[0]),
-    iconUrls: [
-      chain.name === "Hardhat"
-        ? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRz4i1wWF516fnkizp1WSDG5rnG8GfkQAVoVQ&s"
-        : "",
-    ],
+    iconUrls: [],
     nativeCurrency: chain.nativeCurrency,
     networkId: chain.id,
   })),

@@ -1,19 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
 import { FrameRequest, FrameTransactionResponse } from "@coinbase/onchainkit/lib/frame/types";
-import { encodeFunctionData, parseEther } from "viem";
-import { ABI, contract, myAddress } from "~~/constants";
+import { encodeFunctionData } from "viem";
+import { ABI, contract } from "~~/constants";
 import { getJourneyById } from "~~/services/frames";
 import { Journey } from "~~/types/commontypes";
 import { storeAnalytics } from "~~/utils/analytics";
 
 export async function POST(req: NextRequest): Promise<NextResponse<FrameTransactionResponse>> {
-  console.log("hey")
   const body: FrameRequest = await req.json();
   const { untrustedData } = body;
   let state;
-  console.log(untrustedData)
+  console.log(untrustedData);
   if (untrustedData?.state && typeof untrustedData.state === "string") {
-    
     state = JSON.parse(decodeURIComponent(untrustedData?.state as string));
   }
   const journeyId = state?.journey_id || "";

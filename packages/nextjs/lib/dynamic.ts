@@ -17,7 +17,8 @@ export const sendTransaction = async (
   networkConfigurations: NetworkConfigurationMap,
 ): Promise<string | undefined> => {
   try {
-    const walletClient = wallet.connector.getWalletClient<WalletClient<Transport, Chain, Account>>();
+    // @ts-ignore
+    const walletClient = wallet.connector?.getWalletClient<WalletClient<Transport, Chain, Account>>();
 
     const chainID = await wallet.connector.getNetwork();
     const currentNetwork = networkConfigurations.evm?.find(network => network.chainId === chainID);

@@ -30,6 +30,7 @@ export const displayTxResult = (
         return "Ξ" + formatEther(displayContent);
       }
     } catch (e) {
+      console.error(e);
       return "Ξ" + formatEther(displayContent);
     }
   }

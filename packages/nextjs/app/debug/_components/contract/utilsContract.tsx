@@ -14,6 +14,7 @@ const isJsonString = (str: string) => {
     JSON.parse(str);
     return true;
   } catch (e) {
+    console.error(e);
     return false;
   }
 };
