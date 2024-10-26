@@ -4,6 +4,7 @@ import connectDB from "~~/services/connectDB";
 
 export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
   await connectDB();
+  console.log("GET frame", params);
   const frame_id = params.id;
   const frame = await Frame.findById(frame_id);
   if (!frame) {

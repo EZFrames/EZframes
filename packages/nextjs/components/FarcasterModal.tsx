@@ -58,7 +58,7 @@ const FarcasterModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
           className="btn btn-success"
           variant="contained"
           onClick={() => {
-            window.navigator.clipboard.writeText(`${APP_URL}/frame/${productID}/${currentFrameId}`);
+            window.navigator.clipboard.writeText(`${APP_URL}/v1/frame/${productID}/${currentFrameId}`);
             notification.success("Link copied to clipboard");
           }}
         >

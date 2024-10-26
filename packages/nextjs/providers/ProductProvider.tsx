@@ -176,17 +176,19 @@ const useProduct = () => {
       return data;
     },
   });
+
   const frames = useMemo(() => {
     return journey?.frames;
   }, [journey]);
+
   const buttons = currentFrame?.intents.filter(intent => intent.type.includes("Button"));
   const textInput = currentFrame?.intents.find(intent => intent.type === "TextInput");
 
   const frameMetadata = useQuery({
     queryKey: ["frameMetadata", productID, currentFrameId],
     queryFn: async () => {
-      console.log("Fetching Frame Metadata", `${APP_URL}/frame/${productID}/${currentFrameId}`);
-      const response = await fetch(`${APP_URL}/frame/${productID}/${currentFrameId}`);
+      console.log("Fetching Frame Metadata", `${APP_URL}/v1/frame/${productID}/${currentFrameId}`);
+      const response = await fetch(`${APP_URL}/v1/frame/${productID}/${currentFrameId}`);
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }

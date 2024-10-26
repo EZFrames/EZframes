@@ -10,8 +10,10 @@ export const revalidate = 0;
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const frameid = params.frameId;
   const journeyId = params.journeyId;
+  console.log("frameId", frameid, journeyId);
   try {
     const frameMetadata = await getFrameMetadata(`${APP_URL}/api/frog/${journeyId}/${frameid}`);
+    console.log(frameMetadata);
     return {
       title: "EZ Frames",
       description: "Check this on warpcast",

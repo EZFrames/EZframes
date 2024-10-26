@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
+import { useState } from "react";
 import { APP_URL } from "~~/constants";
 import { useProductJourney } from "~~/providers/ProductProvider";
-import { useState } from "react";
 
 /**
  * By default, there are no styles so it is up to you to style the components as you wish.
@@ -54,7 +54,6 @@ function FrameRender() {
       {/* Image container for the image */}
       <div className={theme.ImageContainer.className} style={theme.ImageContainer.style}>
         {!imageLoaded && <div className={theme.Skeleton.className} />} {/* Show skeleton while loading */}
-        
         {/* Rendering the image based on its type using the components defined in the theme */}
         {currentFrame.image.type === "html" && (
           <img

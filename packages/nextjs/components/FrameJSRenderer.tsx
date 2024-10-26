@@ -114,7 +114,7 @@ export default function FrameJSRenderer() {
     privateKey: "0x00000000000000000000000000000000000000000000000000000000000000000",
   };
   const frameState = useFrame({
-    homeframeUrl: `${APP_URL}/frame/${productID}/${currentFrameId}`,
+    homeframeUrl: `${APP_URL}/v1/frame/${productID}/${currentFrameId}`,
     frameActionProxy: "/api/proxy/",
     frameGetProxy: "/api/proxy/",
     connectedAddress: undefined,

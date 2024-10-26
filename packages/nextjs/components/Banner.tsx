@@ -125,9 +125,9 @@ export const Banner = () => {
           </div>
           <div className="lg:w-1/2 p-4 text-center">
             {/* Insert FRAME CODE here */}
-            <div className="gradient-card">
+            {/* <div className="gradient-card">
               <span className="text-center text-md lg:text-4xl text-black leading-normal">Example Frame 🖼 </span>
-            </div>
+            </div> */}
             <div className="flex flex-col bg-base-100 p-4 items-center text-center border border-black mt-4">
               <DefaultFrameRender />
             </div>

@@ -72,6 +72,7 @@ app.frame(`/:journeyId/:frameId`, async c => {
     throw new Error("Invalid journey or frame ID");
   }
   const [, journeyId, frameId] = match;
+  console.log("frameId", frameId, journeyId);
   if (c.req.method === "POST") {
     storeAnalytics(c.frameData as FrameData, journeyId, frameId, "submit-frame");
   }
