@@ -2,37 +2,36 @@ import { FrameMetadataType } from "@coinbase/onchainkit";
 import { Abi } from "viem";
 import { InternalFrameJSON } from "~~/types/commontypes";
 
-export const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://ezframes.xyz";
+export const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3001";
 export const ENZYME_API_KEY = process.env.ENZYME_API_KEY;
 
 export const INITIAL_FRAME: InternalFrameJSON = {
   image: {
     type: "html",
-    content: `<div style={{ color: 'black',height:'300px',width:'300px', display: 'flex', fontSize: 60 }}> Select your fruit! </div>`,
+    content: `<div style="font-size:72px;font-weight:700;font-family:Inter;text-align:center;margin-bottom:20px;display:flex">New Frame</div>`,
   },
   intents: [
     {
-      type: "Button",
-      props: {
-        value: "apple",
-      },
-      content: "DIDNT ASKKKK",
-    },
-    {
       type: "Button.Link",
       props: {
-        href: "https://google.com",
+        href: "https://ezframes.xyz",
       },
-      content: "Google",
+      content: "Redirect Button",
     },
     {
       type: "Button.Transaction",
       props: {
         value: "mango",
       },
-      content: "Mango",
+      content: "Transaction Button",
     },
-    { type: "TextInput", props: { placeholder: "Enter your favourite fruit" } },
+    {
+      type: "Button",
+      props: {
+        action: "post",
+      },
+      content: "Link Button",
+    },
   ],
 };
 
