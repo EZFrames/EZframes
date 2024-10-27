@@ -1,14 +1,10 @@
 "use client";
 
 import type { NextPage } from "next";
-import { Banner } from "~~/components/Banner";
+import MiddleSection from "~~/components/middle-section";
 
 const Home: NextPage = () => {
-  return (
-    <div className="flex items-center justify-center flex-col flex-grow page">
-      <Banner />
-    </div>
-  );
+  return <MiddleSection />;
 };
 
 export default Home;

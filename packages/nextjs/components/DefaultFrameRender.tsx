@@ -19,7 +19,7 @@ function DefaultFrameRender() {
         }}
       />
       <input
-        className="w-full p-2 border mt-[10px] border-gray-400 rounded bg-white" // Set background color to white
+        className="w-full p-2 text-sm border mt-[10px] border-gray-400 rounded bg-white" // Set background color to white
         type="text"
         disabled
         placeholder={"Create the best of frames with bare minimum effort"}
