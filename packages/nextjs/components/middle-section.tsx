@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import DefaultFrameRender from "./DefaultFrameRender";
 import TutorialFrame from "./tutorial-frame";
 import { motion } from "framer-motion";
@@ -34,13 +35,13 @@ export default function MainContent() {
             <p className="text-xl text-gray-300 mb-8">
               Create engaging, interactive content for the decentralized social network. No coding required.
             </p>
-            <a
-              href="#"
+            <Link
+              href="/dashboard"
               className="inline-flex items-center bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-full transition-colors duration-300 transform hover:scale-105"
             >
               Get Started Now
               <ArrowRight className="ml-2 w-5 h-5" />
-            </a>
+            </Link>
 
             <div className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-6">
               <motion.div

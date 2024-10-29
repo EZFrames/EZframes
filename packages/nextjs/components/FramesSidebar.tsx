@@ -1,86 +1,114 @@
+"use client";
+
 import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { Plus } from "lucide-react";
+import { Loader2, Plus } from "lucide-react";
 import { INITIAL_FRAME } from "~~/constants";
 import { useProductJourney } from "~~/providers/ProductProvider";
 import { getFrameById } from "~~/services/frames";
 import { Frame, InternalFrameJSON } from "~~/types/commontypes";
+import { notification } from "~~/utils/scaffold-eth";
+import { Button } from "~~/~/components/ui/button";
+import { ScrollArea } from "~~/~/components/ui/scroll-area";
+import { Skeleton } from "~~/~/components/ui/skeleton";
 
-function FrameSidebar() {
+export default function FrameSidebar() {
   const { productQuery, frame, setFrame, setCurrentFrame, createFrame, currentFrameId, setCurrentFrameId } =
     useProductJourney();
   const [frames, setFrames] = useState<Frame[] | undefined>(undefined);
 
   const framesQuery = useQuery({
     queryKey: ["frames", productQuery.data],
-    queryFn: () => {
+    queryFn: async () => {
       if (!productQuery.data) return;
-      return Promise.all(productQuery?.data?.frames.map(frame => getFrameById(frame)));
+      return Promise.all(productQuery.data.frames.map(frameId => getFrameById(frameId)));
     },
+    enabled: !!productQuery.data,
   });
 
   useEffect(() => {
     if (framesQuery.data) {
-      setFrames(framesQuery?.data);
+      setFrames(framesQuery.data);
     }
   }, [framesQuery.data]);
 
   useEffect(() => {
-    setCurrentFrameId(frame?._id as string);
+    if (frame?._id) {
+      setCurrentFrameId(frame._id);
+    }
   }, [frame, setCurrentFrameId]);
 
-  const onCreate = async () => {
-    await createFrame.mutateAsync({
-      name: "Frame",
-      frameJson: INITIAL_FRAME as InternalFrameJSON,
-      connectedTo: [],
-    });
+  const handleCreateFrame = async () => {
+    try {
+      await createFrame.mutateAsync({
+        name: "New Frame",
+        frameJson: INITIAL_FRAME as InternalFrameJSON,
+        connectedTo: [],
+      });
+      notification.success("Frame created successfully");
+    } catch (error: any) {
+      notification.error(`Failed to create frame: ${error.message}`);
+    }
   };
 
-  if (!frames) return null;
+  const handleFrameSelect = (selectedFrame: Frame) => {
+    setCurrentFrameId(selectedFrame._id);
+    setFrame(selectedFrame);
+    setCurrentFrame(selectedFrame.frameJson);
+  };
+
+  if (framesQuery.isLoading) {
+    return (
+      <div className="flex h-full flex-col space-y-4 bg-background p-4">
+        <Skeleton className="h-6 w-3/4" />
+        <Skeleton className="h-10 w-full" />
+        <Skeleton className="h-10 w-full" />
+        <Skeleton className="h-10 w-full" />
+      </div>
+    );
+  }
+
+  if (framesQuery.isError) {
+    return (
+      <div className="flex h-full flex-col items-center justify-center bg-background p-4 text-center">
+        <p className="text-sm text-muted-foreground">Failed to load frames</p>
+        <Button variant="outline" onClick={() => framesQuery.refetch()} className="mt-2">
+          Retry
+        </Button>
+      </div>
+    );
+  }
 
   return (
-    <div className="flex h-full flex-col bg-white">
-      <div className="mt-1 p-3 pb-1 border-b b1rder-gray-200">
-        <h1 className="text-lg font-semibold">Frames</h1>
+    <div className="flex h-full flex-col bg-background">
+      <div className="border-b p-4">
+        <h2 className="text-lg font-semibold">Frames</h2>
       </div>
-      {/* Frames List */}
-      <div className="flex-1 overflow-y-auto p-3 mt-1">
-        <div className="space-y-2">
-          {frames.map(slide => (
-            <button
-              key={slide._id}
-              onClick={() => {
-                setCurrentFrameId(slide._id as string);
-                setFrame(slide);
-                setCurrentFrame(slide.frameJson);
-              }}
-              className={`
-                w-full rounded-lg px-4 py-2 text-left transition-all
-                ${
-                  slide._id === currentFrameId
-                    ? "bg-blue-50 text-blue-700 ring-2 ring-blue-200"
-                    : "hover:bg-gray-50 text-gray-700 hover:text-gray-900"
-                }
-              `}
+      <ScrollArea className="flex-1">
+        <div className="space-y-2 p-4">
+          {frames?.map(frame => (
+            <Button
+              key={frame._id}
+              variant={frame._id === currentFrameId ? "secondary" : "ghost"}
+              className="w-full justify-start"
+              onClick={() => handleFrameSelect(frame)}
             >
-              <div className="flex items-center gap-2">
-                <div className="h-2 w-2 rounded-full bg-current opacity-75" />
-                <span className="text-sm font-medium">{slide.name}</span>
-              </div>
-            </button>
+              <div className="mr-2 h-2 w-2 rounded-full bg-primary" />
+              <span className="truncate">{frame.name}</span>
+            </Button>
           ))}
-          <button
-            onClick={onCreate}
-            className="flex w-full items-center justify-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700"
-          >
-            <Plus className="h-4 w-4" />
-            Add Frame
-          </button>
         </div>
+      </ScrollArea>
+      <div className="border-t p-4">
+        <Button onClick={handleCreateFrame} className="w-full" disabled={createFrame.isPending}>
+          {createFrame.isPending ? (
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+          ) : (
+            <Plus className="mr-2 h-4 w-4" />
+          )}
+          Add Frame
+        </Button>
       </div>
     </div>
   );
 }
-
-export default FrameSidebar;
