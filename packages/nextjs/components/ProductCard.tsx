@@ -2,44 +2,45 @@
 
 import React from "react";
 import { useRouter } from "next/navigation";
-import { PencilIcon } from "@heroicons/react/20/solid";
-import { ArrowRightIcon } from "@heroicons/react/24/outline";
+import { Button } from "../~/components/ui/button";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../~/components/ui/card";
+import { motion } from "framer-motion";
+import { ArrowRight } from "lucide-react";
 
 interface ProductCardProps {
   name: string;
   image: string;
   id: string;
 }
-const ProductCard: React.FC<ProductCardProps> = ({ name, image, id }) => {
+
+export default function ProductCard({ name, image, id }: ProductCardProps) {
   const router = useRouter();
 
-  const handleCardClick = () => {
+  const handleVisit = () => {
     router.push(`/dashboard/${id}`);
   };
 
   return (
-    <div className="card bg-base-100 w-full md:w-[20vw] h-[200px] md:h-[150px] rounded-2xl relative">
-      <figure>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={image} alt="Image Alt Text" className="object-cover w-full h-full rounded-2xl" />
-      </figure>
-      <div className="absolute inset-0 bg-gradient-to-t from-gray-800 via-gray-800/40 rounded-t-2xl"></div>
-      <div className="card-body absolute bottom-0 w-full text-white">
-        <h3 className="card-title text-lg md:text-3xl font-bold">{name}</h3>
-        <div className="card-actions flex justify-end mt-2 space-x-2">
-          <button className="p-2 border border-gray-300 rounded-full bg-white hover:bg-gray-100 shadow-md focus:outline-none focus:ring-2 focus:ring-gray-200">
-            <PencilIcon className="h-4 w-4 text-gray-700" />
-          </button>
-          <button
-            className="p-2 border border-gray-300 rounded-full bg-white hover:bg-gray-100 shadow-md focus:outline-none focus:ring-2 focus:ring-gray-200"
-            onClick={handleCardClick}
-          >
-            <ArrowRightIcon className="h-4 w-4 text-gray-700 " />
-          </button>
-        </div>
-      </div>
-    </div>
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      whileHover={{ y: -5 }}
+    >
+      <Card className="overflow-hidden transition-all hover:shadow-lg bg-gray-800 border-purple-500">
+        <CardHeader className="p-0">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={image} alt={name} className="aspect-video w-full object-cover" />
+        </CardHeader>
+        <CardContent className="p-4">
+          <CardTitle className="line-clamp-1 text-purple-300">{name}</CardTitle>
+        </CardContent>
+        <CardFooter className="p-4 pt-0">
+          <Button className="w-full bg-purple-600 hover:bg-purple-700 text-white" onClick={handleVisit}>
+            View Frame <ArrowRight className="ml-2 h-4 w-4" />
+          </Button>
+        </CardFooter>
+      </Card>{" "}
+    </motion.div>
   );
-};
-
-export default ProductCard;
+}

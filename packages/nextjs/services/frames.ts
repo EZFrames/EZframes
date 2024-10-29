@@ -131,12 +131,19 @@ export const getJourneyById = async (id: string) => {
   }
 };
 
-export const getAllTemplates = async () => {
+export const getAllTemplates = async (walletAddress: `0x${string}`) => {
   try {
-    const response = await fetch(`/api/journey`);
+    const response = await fetch(`/api/journey?walletAddress=${walletAddress}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
     if (!response.ok) {
       throw new Error("Network response was not ok");
     }
+
     const data = await response.json();
     return data;
   } catch (error: any) {
