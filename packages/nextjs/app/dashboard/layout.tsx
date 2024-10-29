@@ -21,12 +21,12 @@ const DashboardLayout = ({ children }: LayoutProps) => {
     },
   });
 
-  useEffect(() => {
-    if (!address) {
-      notification.error(`You need to connect your wallet to access this page`);
-      redirect("/");
-    }
-  }, [address]);
+  // useEffect(() => {
+  //   if (!address) {
+  //     notification.error(`You need to connect your wallet to access this page`);
+  //     redirect("/");
+  //   }
+  // }, [address]);
   const dehydratedState = dehydrate(queryClient);
   return <HydrationBoundary state={dehydratedState}>{children}</HydrationBoundary>;
 };

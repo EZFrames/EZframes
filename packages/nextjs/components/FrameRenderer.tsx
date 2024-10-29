@@ -46,6 +46,7 @@ const theme = {
 function FrameRender() {
   const { currentFrame, buttons, textInput, currentFrameId, productID } = useProductJourney();
   const [imageLoaded, setImageLoaded] = useState(false); // State to track image loading
+  const [imageError, setImageError] = useState(false);
 
   if (!currentFrame) return null;
 
@@ -55,21 +56,51 @@ function FrameRender() {
       <div className={theme.ImageContainer.className} style={theme.ImageContainer.style}>
         {!imageLoaded && <div className={theme.Skeleton.className} />} {/* Show skeleton while loading */}
         {/* Rendering the image based on its type using the components defined in the theme */}
-        {currentFrame.image.type === "html" && (
-          <img
-            src={`${APP_URL}/api/frog/${productID}/${currentFrameId}/img`}
-            alt="Frame HTML Image"
+        {!imageError ? (
+          // Display the image based on its type, and show error fallback on failure
+          <>
+            {currentFrame.image.type === "html" && (
+              <img
+                src={`${APP_URL}/api/frog/${productID}/${currentFrameId}/img`}
+                alt="Frame HTML Image"
+                className={theme.Image.className}
+                onLoad={() => setImageLoaded(true)} // Set loaded state on image load
+                onError={() => setImageError(true)} // Set error state on image load failure
+              />
+            )}
+            {currentFrame.image.type === "src" && (
+              <img
+                src={currentFrame.image.src}
+                alt="Frame image"
+                className={theme.Image.className}
+                onLoad={() => setImageLoaded(true)}
+              />
+            )}
+          </>
+        ) : (
+          // Render fallback content when image fails to load
+          <div
             className={theme.Image.className}
-            onLoad={() => setImageLoaded(true)} // Set loaded state on image load
-          />
-        )}
-        {currentFrame.image.type === "src" && (
-          <img
-            src={currentFrame.image.src}
-            alt="Frame image"
-            className={theme.Image.className}
-            onLoad={() => setImageLoaded(true)} // Set loaded state on image load
-          />
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              textAlign: "center",
+              padding: "20px", // Optional for spacing
+              wordWrap: "break-word", // Ensures long text wraps within the container
+            }}
+          >
+            <p>
+              Image failed to load since error in HTML
+              <br />
+              <br />
+              <br />
+              - if using HTML try using a Satori Playground to make sure image renders correct <br />
+              - Make sure if a div has more than two child elements use display: flex <br />
+              - Make sure your css supports the satori standards <br />
+            </p>
+          </div>
         )}
       </div>
 

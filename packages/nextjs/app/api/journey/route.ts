@@ -3,16 +3,18 @@ import Journey from "~~/model/journey";
 import connectDB from "~~/services/connectDB";
 
 export async function GET(req: NextRequest) {
-  const { searchParams } = new URL(req.url);
-  const walletAddress = searchParams.get("walletAddress") as string;
+  // const { searchParams } = new URL(req.url);
+  // const walletAddress = searchParams.get("walletAddress") as string;
 
-  console.log(walletAddress);
+  // console.log(walletAddress);
   await connectDB();
 
   const journeys = await Journey.find({
-    walletAddress,
+    // TODO: uncomment
+    // walletAddress,
   });
 
+  console.log("yabba", journeys);
   return NextResponse.json(journeys);
 }
 

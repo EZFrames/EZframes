@@ -15,6 +15,7 @@ import { Skeleton } from "~~/~/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~~/~/components/ui/tabs";
 
 const MyFrames = ({ frames }: { frames: Journey[] }) => {
+  console.log("Chammma", frames)
   const [showAll, setShowAll] = useState(false);
   const displayedFrames = showAll ? frames : frames.slice(0, 4);
 
@@ -25,11 +26,9 @@ const MyFrames = ({ frames }: { frames: Journey[] }) => {
           <div className="rounded-full bg-purple-900 p-3">
             <Plus className="h-6 w-6 text-purple-300" />
           </div>
-          <h3 className="mt-4 text-lg font-semibold text-purple-300">No frames yet</h3>
-          <p className="mt-2 text-sm text-purple-200">
-            Get started by creating your first frame or pick a system template
-          </p>
-          <Button className="mt-4 bg-purple-600 hover:bg-purple-700 text-white">Create Frame</Button>
+          <h3 className="mt-4 text-lg font-semibold text-purple-300">No journeys yet</h3>
+          <p className="mt-2 text-sm text-purple-200">Get started by using a precreated template ⚡</p>
+          <Button className="mt-4 bg-purple-600 hover:bg-purple-700 text-white">Create Frame Journey</Button>
         </CardContent>
       </Card>
     );
@@ -38,7 +37,7 @@ const MyFrames = ({ frames }: { frames: Journey[] }) => {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold text-purple-300">My Frames</h2>
+        <h2 className="text-2xl font-bold text-purple-300">My Frame Journeys</h2>
         {frames.length > 4 && (
           <Button
             variant="outline"
@@ -124,27 +123,27 @@ export default function Dashboard() {
   const myFrames = useQuery({
     queryKey: ["myFrames", address],
     queryFn: async () => {
-      if (!address) throw new Error("No address provided");
+      // if (!address) throw new Error("No address provided");
       return getAllTemplates(address as `0x${string}`);
     },
-    enabled: !!address,
   });
-
-  if (!address) {
-    return (
-      <div className="flex h-[calc(100vh-4rem)] items-center justify-center bg-gradient-to-br from-gray-900 via-purple-900 to-black">
-        <Card className="w-full max-w-md bg-gray-800 border-purple-500">
-          <CardContent className="flex flex-col items-center justify-center p-6 text-center">
-            <div className="rounded-full bg-purple-900 p-3">
-              <Loader2 className="h-6 w-6 animate-spin text-purple-300" />
-            </div>
-            <h3 className="mt-4 text-lg font-semibold text-purple-300">Connecting Wallet</h3>
-            <p className="mt-2 text-sm text-purple-200">Please connect your wallet to view your dashboard.</p>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
+  console.log(myFrames.data);
+  // TODO: Uncomment
+  // if (!address) {
+  //   return (
+  //     <div className="flex h-[calc(100vh-4rem)] items-center justify-center bg-gradient-to-br from-gray-900 via-purple-900 to-black">
+  //       <Card className="w-full max-w-md bg-gray-800 border-purple-500">
+  //         <CardContent className="flex flex-col items-center justify-center p-6 text-center">
+  //           <div className="rounded-full bg-purple-900 p-3">
+  //             <Loader2 className="h-6 w-6 animate-spin text-purple-300" />
+  //           </div>
+  //           <h3 className="mt-4 text-lg font-semibold text-purple-300">Connecting Wallet</h3>
+  //           <p className="mt-2 text-sm text-purple-200">Please connect your wallet to view your dashboard.</p>
+  //         </CardContent>
+  //       </Card>
+  //     </div>
+  //   );
+  // }
 
   return (
     <ScrollArea className="h-[calc(100vh-4rem)] bg-gradient-to-br from-gray-900 via-purple-900 to-black">
@@ -155,7 +154,7 @@ export default function Dashboard() {
               value="my-frames"
               className="p-2 text-purple-200 data-[state=active]:bg-purple-700 data-[state=active]:text-white"
             >
-              My Frames
+              My Frame Journeys
             </TabsTrigger>
             <TabsTrigger
               value="templates"

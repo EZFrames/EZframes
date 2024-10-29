@@ -607,3 +607,5 @@ export const ABI: Abi = [
 
 export const contract = "0xf8dB9d751088FAb0f7a57b973b5289A5fDA8dB24";
 export const myAddress = "0x4CbEe7aD42d33e9D3B41e8b6FAcA2f6f173C8A94";
+
+export const htmlErrorImageTemplate = `<div style="font-size:36px;background-color:light-red;color:#fff;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;border:2px solid #ccc;border-radius:10px;padding:20px;box-shadow:0 4px 20px rgba(0,0,0,.1)">Error<div style=display:flex;font-size:20px;margin-top:40px>$$ErrorString$$</div></div>`;

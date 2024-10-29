@@ -80,23 +80,27 @@ const ButtonEditor = ({ button, onSave, onDelete }: ButtonEditorProps) => {
           <TextField
             id="buttonValue"
             size="small"
-            value={button.props.value as string}
+            value={button.props?.value || ""} // Default to an empty string if no value
             onChange={e => {
-              onSave({ ...button, props: { ...button.props, value: e.target.value as string } });
+              onSave({ ...button, props: { ...button.props, value: e.target.value } });
             }}
           />
+
           <label htmlFor="buttonType" className="block text-sm font-medium text-gray-700 mb-1">
             Next Frame
           </label>
           <Select
             id="post"
             size="small"
-            value={removeUrl(button.props.action as string, productID)}
+            value={removeUrl(button.props?.action || "", productID)} // Default to an empty string if no action
             variant="outlined"
             onChange={e =>
               onSave({
                 ...button,
-                props: { ...button.props, action: `${APP_URL}/api/frog/${productID}/` + e.target.value },
+                props: {
+                  ...button.props,
+                  action: `${APP_URL}/api/frog/${productID}/` + e.target.value,
+                },
               })
             }
           >
@@ -119,13 +123,14 @@ const ButtonEditor = ({ button, onSave, onDelete }: ButtonEditorProps) => {
           <TextField
             id="buttonHref"
             size="small"
-            value={button.props.href as string}
+            value={button.props?.href || ""} // Default to empty string if href is undefined
             onChange={e => {
-              onSave({ ...button, props: { ...button.props, href: e.target.value as string } });
+              onSave({ ...button, props: { ...button.props, href: e.target.value } });
             }}
           />
         </>
       )}
+
       {button.type === "Button.Mint" && (
         <>
           <label htmlFor="buttonMint" className="block text-sm font-medium text-gray-700 mb-1">
@@ -134,13 +139,14 @@ const ButtonEditor = ({ button, onSave, onDelete }: ButtonEditorProps) => {
           <TextField
             id="buttonMint"
             size="small"
-            value={button.props.target as string}
+            value={button.props?.target || ""} // Default to empty string if target is undefined
             onChange={e => {
-              onSave({ ...button, props: { ...button.props, target: e.target.value as string } });
+              onSave({ ...button, props: { ...button.props, target: e.target.value } });
             }}
           />
         </>
       )}
+
       {button.type === "Button.Location" && (
         <>
           <label htmlFor="buttonLocation" className="block text-sm font-medium text-gray-700 mb-1">
@@ -149,7 +155,7 @@ const ButtonEditor = ({ button, onSave, onDelete }: ButtonEditorProps) => {
           <TextField
             id="buttonLocation"
             size="small"
-            value={button.props.location as string}
+            value={button.props?.location || ""} // Default to empty string if location is undefined
             onChange={e =>
               onSave({
                 ...button,
@@ -159,6 +165,7 @@ const ButtonEditor = ({ button, onSave, onDelete }: ButtonEditorProps) => {
           />
         </>
       )}
+
       {button.type === "Button.Transaction" && (
         <>
           <label htmlFor="buttonTx" className="block text-sm font-medium text-gray-700 mb-1">
@@ -167,7 +174,7 @@ const ButtonEditor = ({ button, onSave, onDelete }: ButtonEditorProps) => {
           <Select
             id="post"
             size="small"
-            value={removeTxUrl(button.props.target as string, productID, frame?._id)}
+            value={removeTxUrl(button.props?.target || "", productID, frame?._id)} // Default to empty string if target is undefined
             variant="outlined"
             onChange={e =>
               onSave({
@@ -182,13 +189,14 @@ const ButtonEditor = ({ button, onSave, onDelete }: ButtonEditorProps) => {
             <MenuItem value="send-contract">Contract interaction</MenuItem>
             <MenuItem value="send-ether">P2P transfer</MenuItem>
           </Select>
+
           <label htmlFor="buttonTx" className="block text-sm font-medium text-gray-700 mb-1">
             Tx Success
           </label>
           <Select
             id="post"
             size="small"
-            value={removeUrl(button.props.action as string, productID)}
+            value={removeUrl(button.props?.action || "", productID)} // Default to empty string if action is undefined
             variant="outlined"
             onChange={e =>
               onSave({
@@ -206,7 +214,8 @@ const ButtonEditor = ({ button, onSave, onDelete }: ButtonEditorProps) => {
                 ),
             )}
           </Select>
-          {button.props.target?.includes("send-ether") && (
+
+          {button.props?.target?.includes("send-ether") && (
             <>
               <label htmlFor="chainId" className="block text-sm font-medium text-gray-700 mb-1">
                 Chain ID
@@ -214,7 +223,7 @@ const ButtonEditor = ({ button, onSave, onDelete }: ButtonEditorProps) => {
               <Select
                 id="chainId"
                 size="small"
-                value=""
+                value={frameTxConfig.chainId || ""} // Default to empty string for chain ID if undefined
                 variant="outlined"
                 onChange={e => {
                   setFrameTxConfig({ ...frameTxConfig, chainId: e.target.value });
@@ -226,31 +235,34 @@ const ButtonEditor = ({ button, onSave, onDelete }: ButtonEditorProps) => {
                   </MenuItem>
                 ))}
               </Select>
+
               <label htmlFor="toAddress" className="block text-sm font-medium text-gray-700 mb-1">
                 To Address
               </label>
               <TextField
                 id="toAddress"
                 size="small"
-                value=""
+                value={frameTxConfig.toAddress || ""} // Default to empty string for toAddress if undefined
                 onChange={e => {
                   setFrameTxConfig({ ...frameTxConfig, toAddress: e.target.value });
                 }}
               />
+
               <label htmlFor="value" className="block text-sm font-medium text-gray-700 mb-1">
                 Value
               </label>
               <TextField
                 id="value"
                 size="small"
-                value=""
+                value={frameTxConfig.value || ""} // Default to empty string for value if undefined
                 onChange={e => {
                   setFrameTxConfig({ ...frameTxConfig, value: e.target.value });
                 }}
               />
             </>
           )}
-          {button.props.target?.includes("send-contract") && (
+
+          {button.props?.target?.includes("send-contract") && (
             <>
               <label htmlFor="chainId" className="block text-sm font-medium text-gray-700 mb-1">
                 Chain ID
@@ -258,7 +270,7 @@ const ButtonEditor = ({ button, onSave, onDelete }: ButtonEditorProps) => {
               <Select
                 id="chainId"
                 size="small"
-                value=""
+                value={frameTxConfig.chainId || ""} // Default to empty string for chain ID if undefined
                 variant="outlined"
                 onChange={e => {
                   setFrameTxConfig({ ...frameTxConfig, chainId: e.target.value });
@@ -270,35 +282,38 @@ const ButtonEditor = ({ button, onSave, onDelete }: ButtonEditorProps) => {
                   </MenuItem>
                 ))}
               </Select>
+
               <label htmlFor="toAddress" className="block text-sm font-medium text-gray-700 mb-1">
                 To Address
               </label>
               <TextField
                 id="toAddress"
                 size="small"
-                value=""
+                value={frameTxConfig.toAddress || ""} // Default to empty string for toAddress if undefined
                 onChange={e => {
                   setFrameTxConfig({ ...frameTxConfig, toAddress: e.target.value });
                 }}
               />
+
               <label htmlFor="value" className="block text-sm font-medium text-gray-700 mb-1">
                 Contract Address (fetch ABI)
               </label>
               <TextField
                 id="value"
                 size="small"
-                value=""
+                value={frameTxConfig.contractAddress || ""} // Default to empty string for contractAddress if undefined
                 onChange={e => {
                   setFrameTxConfig({ ...frameTxConfig, contractAddress: e.target.value });
                 }}
               />
+
               <label htmlFor="functionName" className="block text-sm font-medium text-gray-700 mb-1">
                 Function Name
               </label>
               <TextField
                 id="functionName"
                 size="small"
-                value=""
+                value={frameTxConfig.functionName || ""} // Default to empty string for functionName if undefined
                 onChange={e => {
                   setFrameTxConfig({ ...frameTxConfig, functionName: e.target.value });
                 }}
