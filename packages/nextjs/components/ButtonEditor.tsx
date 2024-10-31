@@ -3,7 +3,7 @@ import CustomButton from "./Button/CustomButton";
 import { MenuItem, Select, TextField } from "@mui/material";
 import { APP_URL } from "~~/constants";
 import { useProductJourney } from "~~/providers/ProductProvider";
-import { getFrameById, removeTxUrl, removeUrl } from "~~/services/frames";
+import { getFrameById, removeUrl } from "~~/services/frames";
 import { Frame, Intent } from "~~/types/commontypes";
 
 interface ButtonEditorProps {
@@ -12,25 +12,25 @@ interface ButtonEditorProps {
   onDelete: () => void;
 }
 
-const chainIds = {
-  Ethereum: "eip155:1",
-  Arbitrum: "eip155:42161",
-  Base: "eip155:8453",
-  Degen: "eip155:666666666",
-  Gnosis: "eip155:100",
-  Optimism: "eip155:10",
-  Zora: "eip155:7777777",
-  Polygon: "eip155:137",
-  Sepolia: "eip155:11155111", // Ethereum Sepolia Testnet
-  ArbitrumSepolia: "eip155:421614", // Arbitrum Sepolia Testnet
-  BaseSepolia: "eip155:84532", // Base Sepolia Testnet
-  OptimismSepolia: "eip155:11155420", // Optimism Sepolia Testnet
-};
-
+// const chainIds = {
+//   Ethereum: "eip155:1",
+//   Arbitrum: "eip155:42161",
+//   Base: "eip155:8453",
+//   Degen: "eip155:666666666",
+//   Gnosis: "eip155:100",
+//   Optimism: "eip155:10",
+//   Zora: "eip155:7777777",
+//   Polygon: "eip155:137",
+//   Sepolia: "eip155:11155111", // Ethereum Sepolia Testnet
+//   ArbitrumSepolia: "eip155:421614", // Arbitrum Sepolia Testnet
+//   BaseSepolia: "eip155:84532", // Base Sepolia Testnet
+//   OptimismSepolia: "eip155:11155420", // Optimism Sepolia Testnet
+// };
+//
 const ButtonEditor = ({ button, onSave, onDelete }: ButtonEditorProps) => {
   const { frames: dbFrames, frame, productID } = useProductJourney();
   const [frames, setFrames] = useState<Frame[] | undefined>();
-  const [frameTxConfig, setFrameTxConfig] = useState<object | undefined>();
+  // const [frameTxConfig, setFrameTxConfig] = useState<object | undefined>();
   useEffect(() => {
     if (dbFrames) {
       Promise.all(dbFrames.map(frame => getFrameById(frame)))
@@ -169,6 +169,10 @@ const ButtonEditor = ({ button, onSave, onDelete }: ButtonEditorProps) => {
       {button.type === "Button.Transaction" && (
         <>
           <label htmlFor="buttonTx" className="block text-sm font-medium text-gray-700 mb-1">
+            Coming soon!!
+          </label>
+          {/*
+<label htmlFor="buttonTx" className="block text-sm font-medium text-gray-700 mb-1">
             Tx Target
           </label>
           <Select
@@ -320,6 +324,7 @@ const ButtonEditor = ({ button, onSave, onDelete }: ButtonEditorProps) => {
               />
             </>
           )}
+         */}
         </>
       )}
       {/* @ts-ignore */}

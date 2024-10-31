@@ -27,13 +27,13 @@ export default function ProductCard({ name, image, id }: ProductCardProps) {
       transition={{ duration: 0.5 }}
       whileHover={{ y: -5 }}
     >
-      <Card className="overflow-hidden transition-all hover:shadow-lg bg-gray-800 border-purple-500">
+      <Card className="overflow-hidden transition-all hover:shadow-lg bg-gray-800 border-black">
         <CardHeader className="p-0">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={image} alt={name} className="aspect-video w-full object-cover" />
         </CardHeader>
         <CardContent className="p-4">
-          <CardTitle className="line-clamp-1 text-purple-300">{name}</CardTitle>
+          <CardTitle className="line-clamp-1 text-white">{name}</CardTitle>
         </CardContent>
         <CardFooter className="p-4 pt-0">
           <Button className="w-full bg-purple-600 hover:bg-purple-700 text-white" onClick={handleVisit}>

@@ -80,7 +80,7 @@ export default function FrameSidebar() {
   }
 
   return (
-    <div className="flex h-full flex-col bg-background">
+    <div className="flex h-[93vh] flex-col bg-background">
       <div className="border-b p-4">
         <h2 className="text-lg font-semibold">Frames</h2>
       </div>
@@ -99,7 +99,7 @@ export default function FrameSidebar() {
           ))}
         </div>
       </ScrollArea>
-      <div className="border-t p-4">
+      <div className="border-t p-4 text-white">
         <Button onClick={handleCreateFrame} className="w-full" disabled={createFrame.isPending}>
           {createFrame.isPending ? (
             <Loader2 className="mr-2 h-4 w-4 animate-spin" />

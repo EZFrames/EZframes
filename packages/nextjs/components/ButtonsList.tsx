@@ -1,5 +1,4 @@
 import { useState } from "react";
-import CustomButton from "./Button/CustomButton";
 import ButtonEditor from "./ButtonEditor";
 import FarcasterModal from "./FarcasterModal";
 import { IconButton } from "@mui/material";
@@ -7,6 +6,7 @@ import { PlusIcon } from "@heroicons/react/24/outline";
 import { useProductJourney } from "~~/providers/ProductProvider";
 import { Intent, InternalFrameJSON } from "~~/types/commontypes";
 import { notification } from "~~/utils/scaffold-eth";
+import { Button } from "~~/~/components/ui/button";
 
 const ButtonList = () => {
   const { currentFrame, setCurrentFrame, frame, saveFrame, deleteFrame } = useProductJourney();
@@ -99,24 +99,22 @@ const ButtonList = () => {
       {buttons[activeButtonIndex] && (
         <ButtonEditor button={buttons[activeButtonIndex]} onSave={handleSave} onDelete={handleDelete} />
       )}
-      <div className="flex items-center">
-        <CustomButton
+      <div className="flex items-center gap-4">
+        <Button
+          className="bg-destructive text-white"
           // @ts-ignore
           onClick={() => {
             deleteFrame.mutateAsync(frame?._id as string);
           }}
-          buttonType="delete"
-          variant="contained"
-          size="small"
         >
           Delete Frame
-        </CustomButton>
-        <CustomButton buttonType="success" variant="contained" onClick={handleSaveFrame}>
+        </Button>
+        <Button className="bg-success text-white" onClick={handleSaveFrame}>
           Save Frame
-        </CustomButton>
-        <button onClick={() => setOpen(!open)} className="btn btn-primary mt-2 flex items-center justify-center">
+        </Button>
+        <Button onClick={() => setOpen(!open)} className="bg-primary text-white">
           Export Product
-        </button>
+        </Button>
       </div>
       {open && <FarcasterModal isOpen={open} onClose={() => setOpen(false)} />}
     </div>
