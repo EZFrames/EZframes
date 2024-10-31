@@ -63,12 +63,12 @@ export default function TutorialFrame() {
             </div>
           </div>
           <h3 className="text-2xl font-semibold mb-2">{tutorialSteps[currentStep].title}</h3>
-          <p className="text-gray-300 text-center mb-4">{tutorialSteps[currentStep].description}</p>
+          <p className="text-gray-600 text-center mb-4">{tutorialSteps[currentStep].description}</p>
         </motion.div>
         <div className="flex justify-between mt-4">
           <button
             onClick={prevStep}
-            className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300"
+            className="bg-black text-white font-bold py-2 px-4 rounded-full transition-colors duration-300"
           >
             <ChevronLeft className="w-6 h-6" />
           </button>
@@ -82,7 +82,7 @@ export default function TutorialFrame() {
           </div>
           <button
             onClick={nextStep}
-            className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300"
+            className="bg-black text-white font-bold py-2 px-4 rounded-full transition-colors duration-300"
           >
             <ChevronRight className="w-6 h-6" />
           </button>

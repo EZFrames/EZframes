@@ -25,10 +25,8 @@ const MyFrames = ({ frames }: { frames: Journey[] }) => {
           <div className="rounded-full bg-purple-900 p-3">
             <Plus className="h-6 w-6 text-purple-300" />
           </div>
-          <h3 className="mt-4 text-lg font-semibold text-purple-300">No frames yet</h3>
-          <p className="mt-2 text-sm text-purple-200">
-            Get started by creating your first frame or pick a system template
-          </p>
+          <h3 className="mt-4 text-lg font-semibold text-black">No frames yet</h3>
+          <p className="mt-2 text-sm text-purple-200">Pick a system template</p>
           <Button className="mt-4 bg-purple-600 hover:bg-purple-700 text-white">Create Frame</Button>
         </CardContent>
       </Card>
@@ -38,7 +36,7 @@ const MyFrames = ({ frames }: { frames: Journey[] }) => {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold text-purple-300">My Frames</h2>
+        <h2 className="text-2xl font-bold text-black">My Frames</h2>
         {frames.length > 4 && (
           <Button
             variant="outline"
@@ -78,24 +76,19 @@ const SystemTemplate = ({
   description: string;
   onClick: () => void;
 }) => (
-  <Card className="overflow-hidden transition-all hover:shadow-lg bg-gray-800 border-purple-500">
+  <Card className="overflow-hidden transition-all hover:shadow-lg bg-gray-800 border-black">
     <CardHeader className="p-0">
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img src={image} alt={name} className="aspect-video w-full object-cover" />
     </CardHeader>
     <CardContent className="p-4">
-      <CardTitle className="flex items-center justify-between text-purple-300">
+      <CardTitle className="flex items-center justify-between text-white">
         {name}
-        <Button
-          variant="outline"
-          size="icon"
-          onClick={onClick}
-          className="border-purple-500 text-purple-300 hover:bg-purple-900 hover:text-purple-100"
-        >
-          <ArrowRight className="h-4 w-4" />
+        <Button variant="outline" size="icon" onClick={onClick} className="border-black bg-black text-white">
+          <ArrowRight className="h-8 w-8" />
         </Button>
       </CardTitle>
-      <p className="mt-2 text-sm text-purple-200">{description}</p>
+      <p className="mt-2 text-sm text-gray-300">{description}</p>
     </CardContent>
   </Card>
 );
@@ -105,7 +98,7 @@ const FrameTemplates = () => {
 
   return (
     <div className="space-y-4 text-white">
-      <h2 className="text-2xl font-bold text-purple-300">System Templates</h2>
+      <h2 className="text-2xl font-bold text-black">System Templates</h2>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
         <SystemTemplate
           name="Product Frames"
@@ -132,7 +125,7 @@ export default function Dashboard() {
 
   if (!address) {
     return (
-      <div className="flex h-[calc(100vh-4rem)] items-center justify-center bg-gradient-to-br from-gray-900 via-purple-900 to-black">
+      <div className="flex h-[calc(100vh-4rem)] items-center justify-center bg-white to-black">
         <Card className="w-full max-w-md bg-gray-800 border-purple-500">
           <CardContent className="flex flex-col items-center justify-center p-6 text-center">
             <div className="rounded-full bg-purple-900 p-3">
@@ -147,23 +140,23 @@ export default function Dashboard() {
   }
 
   return (
-    <ScrollArea className="h-[calc(100vh-4rem)] bg-gradient-to-br from-gray-900 via-purple-900 to-black">
+    <ScrollArea className="h-[calc(100vh-4rem)] bg-white to-black">
       <div className="container mx-auto space-y-8 p-6">
         <Tabs defaultValue="my-frames" className="w-full">
-          <TabsList className="grid w-full grid-cols-2 bg-gray-800">
+          <TabsList className="grid w-full grid-cols-2 rounded-lg bg-gray-100 p-1">
             <TabsTrigger
               value="my-frames"
-              className="p-2 text-purple-200 data-[state=active]:bg-purple-700 data-[state=active]:text-white"
+              className="rounded-md px-3 py-2 text-sm font-medium text-gray-700 transition-all data-[state=active]:bg-white data-[state=active]:text-gray-900 data-[state=active]:shadow-sm"
             >
               My Frames
             </TabsTrigger>
             <TabsTrigger
               value="templates"
-              className="p-2 text-purple-200 data-[state=active]:bg-purple-700 data-[state=active]:text-white"
+              className="rounded-md px-3 py-2 text-sm font-medium text-gray-700 transition-all data-[state=active]:bg-white data-[state=active]:text-gray-900 data-[state=active]:shadow-sm"
             >
               Templates
             </TabsTrigger>
-          </TabsList>
+          </TabsList>{" "}
           <TabsContent value="my-frames" className="mt-6">
             {myFrames.isLoading ? (
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
