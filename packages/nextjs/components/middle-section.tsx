@@ -2,10 +2,11 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import DefaultFrameRender from "./DefaultFrameRender";
 import TutorialFrame from "./tutorial-frame";
 import { motion } from "framer-motion";
-import { ArrowRight, BarChart, CreditCard, Globe, Zap } from "lucide-react";
+import { ArrowRight, BarChart2, Globe2, WalletIcon, Zap } from "lucide-react";
+import { Button } from "~~/~/components/ui/button";
+import { Card } from "~~/~/components/ui/card";
 
 export default function MainContent() {
   const [mounted, setMounted] = useState(false);
@@ -17,88 +18,97 @@ export default function MainContent() {
   if (!mounted) return null;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-black text-white">
-      <main className="container mx-auto px-4 py-12">
-        <div className="flex flex-col lg:flex-row gap-12">
+    <div className="min-h-screen bg-white">
+      <main className="container mx-auto px-6 py-16">
+        <div className="flex flex-col lg:flex-row gap-16 items-center">
           <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5 }}
-            className="lg:w-1/2"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="w-full"
           >
-            <h1 className="text-5xl font-bold mb-6">
-              We power your <br />
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-600">
-                Farcaster frames
-              </span>
+            <div className="inline-flex items-center gap-2 bg-gray-50 rounded-full px-4 py-1.5 text-sm mb-8">
+              <span className="w-2 h-2 rounded-full bg-green-500" />
+              <span className="text-gray-600">Idea to Frame within seconds</span>
+            </div>
+
+            <h1 className="text-6xl font-normal tracking-tight text-gray-700 mb-6 w-full">
+              We
+              <span className="font-bold text-black"> Power </span>
+              your
+              <span className="block font-bold mt-1 text-black">Farcaster Frames</span>
             </h1>
-            <p className="text-xl text-gray-300 mb-8">
+
+            <p className="text-xl text-gray-600 mb-8 leading-relaxed">
               Create engaging, interactive content for the decentralized social network. No coding required.
             </p>
-            <Link
-              href="/dashboard"
-              className="inline-flex items-center bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-full transition-colors duration-300 transform hover:scale-105"
-            >
-              Get Started Now
-              <ArrowRight className="ml-2 w-5 h-5" />
-            </Link>
 
-            <div className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-6">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.2 }}
-                className="bg-gray-800 bg-opacity-50 p-4 rounded-lg hover:bg-opacity-70 transition-all duration-300"
+            <div className="flex items-center gap-4 mb-16">
+              <Button
+                asChild
+                size="lg"
+                className="rounded-full text-base h-12 px-6 text-white bg-gray-900 hover:bg-gray-800"
               >
-                <Globe className="w-8 h-8 text-purple-400 mb-2" />
-                <h3 className="text-lg font-semibold mb-1">Global Reach</h3>
-                <p className="text-sm text-gray-400">Advertise to a decentralized audience on Farcaster</p>
-              </motion.div>
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.3 }}
-                className="bg-gray-800 bg-opacity-50 p-4 rounded-lg hover:bg-opacity-70 transition-all duration-300"
-              >
-                <Zap className="w-8 h-8 text-purple-400 mb-2" />
-                <h3 className="text-lg font-semibold mb-1">Easy Creation</h3>
-                <p className="text-sm text-gray-400">Build frames with our intuitive dashboard</p>
-              </motion.div>
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.4 }}
-                className="bg-gray-800 bg-opacity-50 p-4 rounded-lg hover:bg-opacity-70 transition-all duration-300"
-              >
-                <CreditCard className="w-8 h-8 text-purple-400 mb-2" />
-                <h3 className="text-lg font-semibold mb-1">Onchain Payments</h3>
-                <p className="text-sm text-gray-400">Seamless crypto transactions within frames</p>
-              </motion.div>
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.5 }}
-                className="bg-gray-800 bg-opacity-50 p-4 rounded-lg hover:bg-opacity-70 transition-all duration-300"
-              >
-                <BarChart className="w-8 h-8 text-purple-400 mb-2" />
-                <h3 className="text-lg font-semibold mb-1">Instant Analytics</h3>
-                <p className="text-sm text-gray-400">Track frame performance in real-time</p>
-              </motion.div>
+                <Link href="/dashboard">
+                  Get Started
+                  <ArrowRight className="ml-2 w-5 h-5" />
+                </Link>
+              </Button>
+              <div className="flex -space-x-2">
+                {[...Array(4)].map((_, i) => (
+                  <div key={i} className="w-8 h-8 rounded-full border-2 border-white bg-gray-200" />
+                ))}
+              </div>
             </div>
-          </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: 0.6 }}
-            className="lg:w-1/2 bg-gradient-to-br from-purple-900 to-indigo-900 rounded-3xl p-8 shadow-2xl"
-          >
-            <div className="h-full w-full flex flex-col items-center justify-center text-2xl font-bold text-purple-300">
-              <DefaultFrameRender />
+            <div className="grid grid-cols-2 gap-6">
+              {[
+                {
+                  icon: <Globe2 />,
+                  title: "Global Reach",
+                  description: "Advertise to a decentralized audience on Farcaster",
+                },
+                {
+                  icon: <Zap />,
+                  title: "Easy Creation",
+                  description: "Build frames with our intuitive dashboard",
+                },
+                {
+                  icon: <WalletIcon />,
+                  title: "Onchain Payments",
+                  description: "Seamless crypto transactions within frames",
+                },
+                {
+                  icon: <BarChart2 />,
+                  title: "Instant Analytics",
+                  description: "Track frame performance in real-time",
+                },
+              ].map((feature, i) => (
+                <motion.div
+                  key={feature.title}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: 0.2 * i }}
+                >
+                  <Card className="border-none bg-gray-50 p-6 hover:bg-gray-100 transition-colors">
+                    <div className="mb-4">{feature.icon}</div>
+                    <h3 className="font-medium text-gray-900 mb-2">{feature.title}</h3>
+                    <p className="text-sm text-gray-600 leading-relaxed">{feature.description}</p>
+                  </Card>
+                </motion.div>
+              ))}
             </div>
           </motion.div>
         </div>
-        <TutorialFrame />
+
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.6 }}
+          className="mt-24 gap-6"
+        >
+          <TutorialFrame />
+        </motion.div>
       </main>
     </div>
   );
