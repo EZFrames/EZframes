@@ -18,7 +18,13 @@ const NewButtonList = () => {
     const newButton = {
       type: "Button" as Intent["type"],
       content: "New Button",
-      props: {},
+      props: {
+        value: "",
+        location: "",
+        action: "",
+        href: "",
+        target: "",
+      },
     };
     setCurrentFrame({
       ...currentFrame,
