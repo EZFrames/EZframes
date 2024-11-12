@@ -2,34 +2,39 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import BtnTypes from "../public/btntypes.png";
+import Customize from "../public/customize.png";
+import ExportFrame from "../public/exportframe.png";
+import LoginImg from "../public/login.png";
+import Templates from "../public/templates.png";
 import { motion } from "framer-motion";
-import { ChevronLeft, ChevronRight, Image as ImageIcon } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const tutorialSteps = [
   {
     title: "Create Your Account",
     description: "Sign up for EZframes to start creating interactive Farcaster frames.",
-    imagePlaceholder: "/placeholder.svg?height=300&width=400",
+    imagePlaceholder: LoginImg,
   },
   {
     title: "Choose a Template",
     description: "Select from our wide range of pre-designed templates or start from scratch.",
-    imagePlaceholder: "/placeholder.svg?height=300&width=400",
+    imagePlaceholder: Templates,
   },
   {
     title: "Customize Your Frame",
     description: "Add your content, adjust html or use image links",
-    imagePlaceholder: "/placeholder.svg?height=300&width=400",
+    imagePlaceholder: Customize,
   },
   {
     title: "Set Up Interactions",
     description: "Configure Transactions, Redirects, or other interactive button actions for your frame.",
-    imagePlaceholder: "/placeholder.svg?height=300&width=400",
+    imagePlaceholder: BtnTypes,
   },
   {
     title: "Publish and Share",
     description: "Deploy your frame to the Warpcast client and share it with your audience.",
-    imagePlaceholder: "/placeholder.svg?height=300&width=400",
+    imagePlaceholder: ExportFrame,
   },
 ];
 
@@ -51,16 +56,13 @@ export default function TutorialFrame() {
           transition={{ duration: 0.3 }}
           className="flex flex-col items-center"
         >
-          <div className="w-full h-64 relative mb-6 rounded-xl overflow-hidden bg-gray-800">
+          <div className="w-full h-64 relative mb-6 rounded-xl overflow-hidden bg-white">
             <Image
               src={tutorialSteps[currentStep].imagePlaceholder}
               alt={`Step ${currentStep + 1}`}
               layout="fill"
-              objectFit="cover"
+              objectFit="contain"
             />
-            <div className="absolute inset-0 flex items-center justify-center">
-              <ImageIcon className="w-16 h-16 text-gray-500" />
-            </div>
           </div>
           <h3 className="text-2xl font-semibold mb-2">{tutorialSteps[currentStep].title}</h3>
           <p className="text-gray-600 text-center mb-4">{tutorialSteps[currentStep].description}</p>
