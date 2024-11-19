@@ -1,10 +1,11 @@
 /** @jsxImportSource frog/jsx */
+import { error } from "console";
 import { Button, Frog, TextInput, parseEther } from "frog";
 import { FrameData } from "frog/_lib/types/frame";
 import { devtools } from "frog/dev";
 import { handle } from "frog/next";
 import { serveStatic } from "frog/serve-static";
-import { ABI } from "~~/constants";
+import { ABI, htmlErrorImageTemplate } from "~~/constants";
 import Analytics from "~~/model/analytics";
 import { getFrameAtServer } from "~~/services/frames";
 import { Frame } from "~~/types/commontypes";
@@ -154,19 +155,28 @@ app.image("/:journeyId/:frameId/img", async c => {
   if (!match || match.length < 3) {
     throw new Error("Invalid journey or frame ID");
   }
-
-  const [, , frameId] = match;
-  const data: Frame = await getFrameAtServer(frameId);
-  const frame = makeFrogFrame(data.frameJson);
-  const parsedHTML = parseHtmlToJsxNode(frame.image.content as string);
-  return c.res({
-    headers: {
-      "Cache-Control": "max-age=0",
-      "cache-control": "max-age=0",
-    },
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    image: parsedHTML as any,
-  });
+  try {
+    const [, , frameId] = match;
+    const data: Frame = await getFrameAtServer(frameId);
+    const frame = makeFrogFrame(data.frameJson);
+    const parsedHTML = parseHtmlToJsxNode(frame.image.content as string);
+    const res = c.res({
+      headers: {
+        "Cache-Control": "max-age=0",
+        "cache-control": "max-age=0",
+      },
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      image: parsedHTML as any,
+    });
+    return res;
+  } catch (error) {
+    console.log("Error encountered:", error);
+    const htmlErrorImage = htmlErrorImageTemplate.replace("$$ErrorString$$", error.toString());
+    const errorImage = parseHtmlToJsxNode(htmlErrorImage);
+    return c.res({
+      image: errorImage as any,
+    });
+  }
 });
 
 devtools(app, { serveStatic });

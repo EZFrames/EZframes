@@ -15,6 +15,7 @@ import { Skeleton } from "~~/~/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~~/~/components/ui/tabs";
 
 const MyFrames = ({ frames }: { frames: Journey[] }) => {
+  console.log("Chammma", frames)
   const [showAll, setShowAll] = useState(false);
   const displayedFrames = showAll ? frames : frames.slice(0, 4);
 
@@ -25,9 +26,9 @@ const MyFrames = ({ frames }: { frames: Journey[] }) => {
           <div className="rounded-full bg-purple-900 p-3">
             <Plus className="h-6 w-6 text-purple-300" />
           </div>
-          <h3 className="mt-4 text-lg font-semibold text-black">No frames yet</h3>
-          <p className="mt-2 text-sm text-purple-200">Pick a system template</p>
-          <Button className="mt-4 bg-purple-600 hover:bg-purple-700 text-white">Create Frame</Button>
+          <h3 className="mt-4 text-lg font-semibold text-purple-300">No journeys yet</h3>
+          <p className="mt-2 text-sm text-purple-200">Get started by using a precreated template ⚡</p>
+          <Button className="mt-4 bg-purple-600 hover:bg-purple-700 text-white">Create Frame Journey</Button>
         </CardContent>
       </Card>
     );
@@ -36,7 +37,7 @@ const MyFrames = ({ frames }: { frames: Journey[] }) => {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold text-black">My Frames</h2>
+        <h2 className="text-2xl font-bold text-purple-300">My Frame Journeys</h2>
         {frames.length > 4 && (
           <Button
             variant="outline"
@@ -117,10 +118,9 @@ export default function Dashboard() {
   const myFrames = useQuery({
     queryKey: ["myFrames", address],
     queryFn: async () => {
-      if (!address) throw new Error("No address provided");
+      // if (!address) throw new Error("No address provided");
       return getAllTemplates(address as `0x${string}`);
     },
-    enabled: !!address,
   });
 
   if (!address) {
@@ -148,7 +148,7 @@ export default function Dashboard() {
               value="my-frames"
               className="rounded-md px-3 py-2 text-sm font-medium text-gray-700 transition-all data-[state=active]:bg-white data-[state=active]:text-gray-900 data-[state=active]:shadow-sm"
             >
-              My Frames
+              My Frame Journeys
             </TabsTrigger>
             <TabsTrigger
               value="templates"

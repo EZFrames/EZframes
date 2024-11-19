@@ -24,7 +24,6 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
   return new NextResponse(JSON.stringify(frame));
 }
 
-// delete frame
 export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
   await connectDB();
   const frame_id = params.id;
